@@ -3,6 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { connectDB } from './configs/db.js';
+import { errorHandler, notFound } from './middlewares/errorsMiddleware.js';
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(notFound);
+app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 
