@@ -3,6 +3,7 @@ import userDal from "../dal/userDal.js";
 import STATUS_CODES from "../utils/StatusCodes.js";
 import RequestError from "../types/errors/RequestError.js";
 import { hashPassword } from "../utils/encryptionUtils.js";
+import { Types } from "mongoose";
 
 const addUser = async (user: User) => {
 	const { email, password } = user;
@@ -17,4 +18,11 @@ const addUser = async (user: User) => {
 	return newUser;
 }
 
-export default { addUser };
+const getUser = async (userId: Types.ObjectId) => {
+	const user = await userDal.getUser(userId);
+	if(!user)
+		throw new RequestError('User not found', STATUS_CODES.NOT_FOUND);
+	return user;
+}
+
+export default { addUser, getUser };
