@@ -1,5 +1,5 @@
 import User from "../types/User.js";
-import userDal from '../dal/UserDal.js';
+import userDal from "../dal/userDal.js";
 import STATUS_CODES from "../utils/StatusCodes.js";
 import RequestError from "../types/errors/RequestError.js";
 import { hashPassword } from "../utils/encryptionUtils.js";
