@@ -23,4 +23,16 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
-export default { registerUser };
+// @desc    Get user
+// @route   GET /api/users
+// @access  Private
+const getUser = asyncHandler(async (req, res) => {  
+  const user = await userService.getUser(req.userId);
+
+  res.json({
+    _id: user._id,
+    email: user.email,
+  });
+});
+
+export default { registerUser, getUser };
