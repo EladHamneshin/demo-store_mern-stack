@@ -1,8 +1,11 @@
-import Product from "./Product.js";
+import {Types} from "mongoose";
 
 type CartItem = {
-    product: Product,
-    quantity: number,
-}
+  user: Types.ObjectId;
+  items: {
+    product_id: Types.ObjectId;
+    quantity: number;
+  }[];
+};
 
 export default CartItem;
