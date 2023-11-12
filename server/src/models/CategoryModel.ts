@@ -1,13 +1,16 @@
 import mongoose from 'mongoose';
 import Category from '../types/Category.js';
+import productModel from './productModel.js'
 
 
 const categorySchema = new mongoose.Schema<Category>(
   {
     name: String ,
-    products: Array,
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'product'
+      }],
     clickCount: Number
-
   },
   {
     timestamps: true,
