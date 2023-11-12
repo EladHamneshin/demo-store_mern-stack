@@ -8,6 +8,7 @@ interface Product {
     imgSource: string;
     name: string;
     clickedCount: number;
+    atributes?: Object
 };
 
 export default Product;
