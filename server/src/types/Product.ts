@@ -1,10 +1,10 @@
-import Category from "./Category.js";
+import CategoryName from "./CategoryName.js";
 
-type Product = {
+interface Product {
     quantity: number;
     price: number;
     description: string;
-    category: Category;
+    category: CategoryName;
     imgSource: string;
     name: string;
     clickedCount: number;

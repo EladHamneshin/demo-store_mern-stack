@@ -1,13 +1,10 @@
-type Category = 
-  | "Electronics"
-  | "Clothing"
-  | "Books"
-  | "Home and Garden"
-  | "Toys and Games"
-  | "Sports and Outdoors"
-  | "Beauty and Personal Care"
-  | "Automotive"
-  | "Furniture"
-  | "Food and Beverages";
+import CategoryName from "./CategoryName.js"
+import Product from "./Product.js"
 
-  export default Category;
+type Category = {
+    name: CategoryName,
+    products: Product[],
+    clickCount: number
+}
+
+export default Category
