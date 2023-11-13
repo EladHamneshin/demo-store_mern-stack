@@ -30,5 +30,11 @@ const deleteQuantity = asyncHandler(async (req: Request, res: Response) => {
     const deleted = await productsService.deleteQuantity(productId, +quantityToDelete)
     res.sendStatus(STATUS_CODES.OK)
 })
+const getTop5Products = asyncHandler(async (req, res) => {  
+    const Top5Products = await productsService.getTop5Products();
+    res.json({
+        Top5Products
+    });
+  });
 
-export default {increaseClickedCount, getProductByID, deleteQuantity}
+export default {increaseClickedCount, getProductByID, deleteQuantity, getTop5Products}

@@ -21,6 +21,12 @@ const getProductQuantity = async (id:  Types.ObjectId) => {
 const deleteQuantity = async (id: Types.ObjectId, quantityToDelete: number) => {
     return await productModel.findByIdAndUpdate({_id: id},{$inc : {quantity: (quantityToDelete * -1)}})
 };
+const getTop5Products =  async () => {
+    const Top5Products = await productModel.find({})
+        .sort({ clickCount: -1 })
+        .limit(5)
+        .exec();
+    return Top5Products
+};
 
-
-export default {getProductByID, increaseClickedCount, getProductQuantity, deleteQuantity}
+export default {getProductByID, increaseClickedCount, getProductQuantity, deleteQuantity, getTop5Products }

@@ -3,6 +3,7 @@ import productcontrollers from "../controllers/productsControllers.js";
 import { authHandler } from "../middlewares/authMiddleware.js";
 
 const productRouter = express.Router();
+productRouter.get('/top5', productcontrollers.getTop5Products);
 
 productRouter.get('/:pid', productcontrollers.getProductByID);
 
