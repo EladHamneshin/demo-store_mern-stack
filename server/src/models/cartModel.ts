@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import CartItem from "../types/CartItem.js";
+import CartItems from "../types/Cart.js";
 
-const cartSchema = new mongoose.Schema<CartItem>({
+const cartSchema = new mongoose.Schema<CartItems>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -17,6 +17,6 @@ const cartSchema = new mongoose.Schema<CartItem>({
   ],
 });
 
-const CartModel = mongoose.model('Cart', cartSchema);
+const CartModel = mongoose.model("Cart", cartSchema);
 
-export default CartModel
+export default CartModel;
