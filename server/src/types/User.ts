@@ -1,9 +1,8 @@
-import CartItem from "./CartItem.js";
+import CartItems from "./Cart.js";
 
 type User = {
-    email: string,
-    password: string,
-    shoppingCart?: CartItem[],
-}
+  email: string;
+  password: string;
+};
 
 export default User;
