@@ -11,6 +11,7 @@ import FurnitureProduct from "../types/CategoryProducts/FurnitureProduct.js";
 import HomeAndGardenProduct from "../types/CategoryProducts/HomeAndGardenProduct.js";
 import SportsAndOutdoorsProduct from "../types/CategoryProducts/SportsAndOutdoorsProduct.js";
 import ToysAndGamesProduct from "../types/CategoryProducts/ToysAndGamesProduct.js";
+
 type ProductTypes = AutomotiveProduct | BeautyAndPersonalCareProduct | BooksProduct | ClothingProduct | ElectronicsProduct | FoodAndBeveragesProduct | FurnitureProduct | HomeAndGardenProduct | SportsAndOutdoorsProduct | ToysAndGamesProduct
 const productSchema = new mongoose.Schema<ProductTypes>(
     {
