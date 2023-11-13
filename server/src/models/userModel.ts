@@ -13,11 +13,6 @@ const userSchema = new mongoose.Schema<User>(
         type: String,
         required: true,
     },
-    shoppingCart: {
-        type: Array,
-        required: false,
-        default: [],
-    },
   },
   {
     timestamps: true,

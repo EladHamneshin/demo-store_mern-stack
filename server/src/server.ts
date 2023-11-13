@@ -8,17 +8,19 @@ import { errorHandler, notFound } from './middlewares/errorsMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productsRoutes.js';
 import categoryRouter from './routes/categoryRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 const app = express();
 
 // APP CONFIGS
 dotenv.config();
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/api/users', userRoutes);
+app.use('/api/users/cart', cartRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/category', categoryRouter);
 app.use(notFound);
@@ -26,8 +28,8 @@ app.use(errorHandler);
 
 const port = process.env.PORT ;
 
-await connectDB()
+await connectDB();
 
 app.listen(port, () => {
-    console.log(`server is runing at port ${port}`);
+  console.log(`server is running at port ${port}`);
 });

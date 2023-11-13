@@ -4,6 +4,7 @@ import STATUS_CODES from "../utils/StatusCodes.js";
 import RequestError from "../types/errors/RequestError.js";
 import { hashPassword } from "../utils/encryptionUtils.js";
 import { Types } from "mongoose";
+import cartDal from "../dal/cartDal.js";
 
 const addUser = async (user: User) => {
 	const { email, password } = user;
@@ -13,8 +14,10 @@ const addUser = async (user: User) => {
 		throw new RequestError('Email already exists', STATUS_CODES.BAD_REQUEST);
 
 	const hashedPassword = await hashPassword(password);
-	const newUser = userDal.addUser({ email, password: hashedPassword });
-
+	const newUser = await userDal.addUser({ email, password: hashedPassword });
+	console.log(newUser._id);
+	
+	const newCart = await cartDal.createCart( newUser._id)
 	return newUser;
 }
 

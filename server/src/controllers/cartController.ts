@@ -1,0 +1,28 @@
+import asyncHandler from "express-async-handler";
+import STATUS_CODES from "../utils/StatusCodes.js";
+import cartService from "../services/cartService.js";
+
+// @desc    Get shopping cart
+// @route   GET /api/cart
+// @access  Private
+const getCart = asyncHandler(async (req, res) => {
+  const cart = await cartService.getCart(req.userId);
+
+  res.json({
+    cartId: cart?.id,
+    items: cart?.items.map((item) => item),
+  });
+});
+
+// @desc    Update shopping cart
+// @route   PUT /api/users/cart
+// @access  Private
+const updateCart = asyncHandler(async (req, res) => {
+  const cart = await cartService.updateCart(req.userId, req.body);
+
+  res.status(STATUS_CODES.CREATED).json({
+    cart: cart,
+  });
+});
+
+export default { getCart, updateCart };
