@@ -15,7 +15,7 @@ const increaseClickedCount = async (id: Types.ObjectId) => {
 };
 
 const getProductQuantity = async (id:  Types.ObjectId) => {
-    return await productModel.findOne({_id : id}).select('quantity') as unknown as number
+    return await productModel.findOne({_id : id}).select('quantity')
 }
 
 const deleteQuantity = async (id: Types.ObjectId, quantityToDelete: number) => {
