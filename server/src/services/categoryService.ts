@@ -25,4 +25,11 @@ const get5Categories = async () => {
     return category;
 }
 
-export default { getCategories, getCategoryProducts, get5Categories }
+const increaseClickedCount = async (req: Request) => {
+    const { cname } = req.params;
+    const category = await categoryDal.increaseClickedCount(cname);
+    if (!category)
+        throw new RequestError('Category not found', STATUS_CODES.NOT_FOUND);
+    return category;
+}
+export default { getCategories, getCategoryProducts, get5Categories, increaseClickedCount }

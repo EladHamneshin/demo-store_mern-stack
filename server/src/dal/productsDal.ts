@@ -15,7 +15,7 @@ const increaseClickedCount = async (id: Types.ObjectId) => {
 };
 
 const getProductQuantity = async (id:  Types.ObjectId) => {
-    return await productModel.findOne({_id : id}).select('quantity') as unknown as number
+    return await productModel.findOne({_id : id}).select('quantity')
 }
 
 const deleteQuantity = async (id: Types.ObjectId, quantityToDelete: number) => {
@@ -23,7 +23,7 @@ const deleteQuantity = async (id: Types.ObjectId, quantityToDelete: number) => {
 };
 const getTop5Products =  async () => {
     const Top5Products = await productModel.find({})
-        .sort({ clickCount: -1 })
+        .sort({ clickedCount: -1 })
         .limit(5)
         .exec();
     return Top5Products

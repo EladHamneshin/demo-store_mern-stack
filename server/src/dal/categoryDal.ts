@@ -21,4 +21,9 @@ const get5Categories = async () => {
     return topCategories
 };
 
-export default { getCategories, getCategoryProducts, get5Categories };
+const increaseClickedCount = async (name: string) => {
+    return await CategoryModel.findOneAndUpdate(
+        { name: name },
+        { $inc: { clickCount: 1 } },)
+};
+export default { getCategories, getCategoryProducts, get5Categories, increaseClickedCount };
