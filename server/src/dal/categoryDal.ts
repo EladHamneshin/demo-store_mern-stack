@@ -1,6 +1,5 @@
-import CategoryModel from "../models/CategoryModel.js";
+import CategoryModel from "../models/categoryModel.js";
 import productModel from "../models/productModel.js";
-import Category from "../types/Category.js";
 
 const getCategories = async () => {
     const categories = await CategoryModel.find({}).select('name');

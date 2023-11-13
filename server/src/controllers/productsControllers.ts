@@ -2,7 +2,6 @@ import productsService from "../services/productsService.js";
 import asyncHandler from "express-async-handler";
 import { Request, Response } from "express";
 import STATUS_CODES from "../utils/StatusCodes.js";
-import RequestError from "../types/errors/RequestError.js";
 import mongoose from "mongoose";
 
 

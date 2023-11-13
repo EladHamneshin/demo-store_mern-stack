@@ -1,6 +1,6 @@
 import { ObjectId, Types } from "mongoose";
 import Product from "../types/Product.js";
-import productModel from "../models/ProductModel.js";
+import productModel from "../models/productModel.js";
 
 const getProductByID = async (id: Types.ObjectId) => {
     return await productModel.findOne({_id: id})
