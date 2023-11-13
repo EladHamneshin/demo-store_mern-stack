@@ -1,4 +1,4 @@
-import CartItems from "./Cart.js";
+import Cart from './Cart.js';
 
 type User = {
   email: string;
