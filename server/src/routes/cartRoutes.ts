@@ -7,7 +7,7 @@ const cartRouter = express.Router();
 cartRouter.use(authHandler);
 
 cartRouter.get("/", cartController.getCart);
-cartRouter.put("/", cartController.updateCart);
+cartRouter.post("/", cartController.updateCart);
 // cartRouter.delete('/', cartController.deleteCart);
 // cartRouter.patch('/', cartController.patchCart);
 
