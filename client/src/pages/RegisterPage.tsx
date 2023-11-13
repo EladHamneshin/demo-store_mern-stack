@@ -5,6 +5,7 @@ import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isValidEmail, isValidPassword } from '../utils/validationUtils';
 import { toast } from 'react-toastify';
+import userAPI from '../api/usersAPI';
 
 
 const RegisterPage = () => {
@@ -64,7 +65,7 @@ const RegisterPage = () => {
 
     try {
       setIsLoading(true);
-      //await register({email, password });
+      await userAPI.register(email.toString(), password.toString() );
       setIsLoading(false);
       toast.success("Register success");
       navigate(ROUTES.HOME);
