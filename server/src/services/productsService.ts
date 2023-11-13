@@ -32,4 +32,11 @@ const deleteQuantity = async (ID: Types.ObjectId,quantityToDelete: number) => {
     return await productsDal.deleteQuantity(ID,quantityToDelete)
 }
 
-export default {getProductByID, increaseClickedCount, deleteQuantity}
+const getTop5Products = async () => {
+    const Top5Products= await productsDal.getTop5Products();
+    if (!Top5Products)
+        throw new RequestError('Top5Products not found', STATUS_CODES.NOT_FOUND);
+    return Top5Products;
+}
+
+export default {getProductByID, increaseClickedCount, deleteQuantity, getTop5Products }
