@@ -1,12 +1,16 @@
 import { Outlet } from 'react-router-dom'
 import './App.css'
+import Copyright from './components/Copyright'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
 
   return (
     <>
-    <div>App</div>
-    <Outlet/>  
+    <ToastContainer />
+    <Outlet /> 
+    <Copyright sx={{ mt: 5 }} />
     </>
   )
 }
