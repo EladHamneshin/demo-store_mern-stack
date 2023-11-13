@@ -1,9 +1,9 @@
-import asyncHandler from "express-async-handler";
-import STATUS_CODES from "../utils/StatusCodes.js";
-import cartService from "../services/cartService.js";
+import asyncHandler from 'express-async-handler';
+import STATUS_CODES from '../utils/StatusCodes.js';
+import cartService from '../services/cartService.js';
 
 // @desc    Get shopping cart
-// @route   GET /api/cart
+// @route   GET /api/users/cart
 // @access  Private
 const getCart = asyncHandler(async (req, res) => {
   const cart = await cartService.getCart(req.userId);
@@ -25,4 +25,23 @@ const updateCart = asyncHandler(async (req, res) => {
   });
 });
 
-export default { getCart, updateCart };
+// @desc    Delete shopping cart
+// @route   DELETE /api/users/cart
+// @access  Private
+const deleteCart = asyncHandler(async (req, res) => {
+  const emptyCart = await cartService.deleteCart(req.userId);
+
+  res.json({
+    cart: emptyCart,
+  });
+});
+
+const patchAmount = asyncHandler(async (req, res) => {
+  const cart = await cartService.patchAmount(req.userId, req.body);
+
+  res.json({
+    cart: cart,
+  });
+});
+
+export default { getCart, updateCart, deleteCart, patchAmount };

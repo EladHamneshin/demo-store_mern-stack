@@ -1,9 +1,9 @@
-import { Types } from "mongoose";
-import CartItem from "./CartItem.js";
+import { Types } from 'mongoose';
+import CartItem from './CartItem.js';
 
-interface CartItems  {
+interface Cart {
   user: Types.ObjectId;
   items: CartItem[];
-};
+}
 
-export default CartItems;
+export default Cart;

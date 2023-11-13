@@ -1,20 +1,20 @@
-import STATUS_CODES from "../utils/StatusCodes.js";
-import RequestError from "../types/errors/RequestError.js";
-import { Types } from "mongoose";
-import cartDal from "../dal/cartDal.js";
-import CartItem from "../types/CartItem.js";
-import CartItems from "../types/Cart.js";
+import STATUS_CODES from '../utils/StatusCodes.js';
+import RequestError from '../types/errors/RequestError.js';
+import { Types } from 'mongoose';
+import cartDal from '../dal/cartDal.js';
+import CartItem from '../types/CartItem.js';
+import Cart from '../types/Cart.js';
 
 const getCart = async (userId: Types.ObjectId) => {
   const cart = await cartDal.getCart(userId);
-  if (!cart) return null;
+  if (!cart) throw new RequestError('No cart found', STATUS_CODES.NO_CONTENT);
   return cart;
 };
 
 const updateCart = async (userId: Types.ObjectId, item: CartItem) => {
-  const dbCart: CartItems | null = await cartDal.getCartProducts(userId);
+  const dbCart: Cart | null = await cartDal.getCartProducts(userId);
   if (!dbCart)
-    throw new RequestError("Cart not found", STATUS_CODES.BAD_REQUEST);
+    throw new RequestError('Cart not found', STATUS_CODES.NO_CONTENT);
 
   const index = dbCart.items.findIndex(
     (dbItem) => dbItem.product_id.toString() === item.product_id.toString()
@@ -26,9 +26,25 @@ const updateCart = async (userId: Types.ObjectId, item: CartItem) => {
   const cartRes = await cartDal.updateCart(userId, dbCart.items);
   if (!cartRes)
     throw new RequestError(
-      "Cart update failed",
+      'Cart update failed',
       STATUS_CODES.INTERNAL_SERVER_ERROR
     );
   return cartRes;
 };
-export default { getCart, updateCart };
+
+const deleteCart = async (userId: Types.ObjectId) => {
+  const cart = await cartDal.deleteCart(userId);
+  if (!cart) throw new RequestError('No cart found', STATUS_CODES.NO_CONTENT);
+  return cart;
+};
+
+const patchAmount = async (
+  userId: Types.ObjectId,
+  metaDate: { pid: string; action: string }
+) => {
+  if (metaDate.action === 'inc')
+    return await cartDal.incAmount(userId, metaDate.pid);
+  return await cartDal.decAmount(userId, metaDate.pid);
+};
+
+export default { getCart, updateCart, deleteCart, patchAmount };
