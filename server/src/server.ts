@@ -7,6 +7,7 @@ import { connectDB } from './configs/db.js';
 import { errorHandler, notFound } from './middlewares/errorsMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productsRoutes.js';
+import categoryRouter from './routes/categoryRoutes.js';
 
 const app = express();
 
@@ -18,11 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes)
+app.use('/api/products', productRoutes);
+app.use('/api/category', categoryRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT ;
 
 await connectDB()
 
