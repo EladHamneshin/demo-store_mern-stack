@@ -8,7 +8,7 @@ cartRouter.use(authHandler);
 
 cartRouter.get("/", cartController.getCart);
 cartRouter.post("/", cartController.updateCart);
-// cartRouter.delete('/', cartController.deleteCart);
+cartRouter.delete('/', cartController.deleteCart);
 // cartRouter.patch('/', cartController.patchCart);
 
 export default cartRouter;
