@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import categoryService from '../services/categoryService.js';
+import STATUS_CODES from "../utils/StatusCodes.js";
 
 const getCategories = asyncHandler(async (req, res) => {  
     const categories = await categoryService.getCategories();
@@ -19,5 +20,10 @@ const get5Categories = asyncHandler(async (req, res) => {
     res.json(categories)
 
 });
-export default {getCategories, getCategoryProducts,  get5Categories };
+
+const increaseClickedCount = asyncHandler(async (req, res) => {
+    const categories = await categoryService.increaseClickedCount(req);
+    res.sendStatus(STATUS_CODES.OK)
+});
+export default {getCategories, getCategoryProducts,  get5Categories, increaseClickedCount };
 
