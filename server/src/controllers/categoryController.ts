@@ -2,9 +2,9 @@ import asyncHandler from "express-async-handler";
 import categoryService from '../services/categoryService.js';
 
 const getCategories = asyncHandler(async (req, res) => {  
-    const categorys = await categoryService.getCategories();
+    const categories = await categoryService.getCategories();
     res.json({
-      categorys
+       categories
     });
   });
 

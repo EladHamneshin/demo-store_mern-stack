@@ -15,10 +15,11 @@ const getCategoryProducts = async (name: string) => {
 
 const get5Categories = async () => {
     const topCategories = await CategoryModel.find({})
-            .sort({ clickCount: -1 }) 
-            .limit(5) 
-            .exec();
-        return topCategories;
+        .sort({ clickCount: -1 })
+        .limit(5)
+        .select('name')
+        .exec();
+    return topCategories
 };
 
 export default { getCategories, getCategoryProducts, get5Categories };
