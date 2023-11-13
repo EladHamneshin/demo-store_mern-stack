@@ -9,7 +9,6 @@ const getProductByID  = async (ID: Types.ObjectId) => {
 
     if(!product)
         throw new RequestError('product not found', STATUS_CODES.BAD_REQUEST)
-        console.log('not fount at service')
 
     return product
 }
@@ -21,13 +20,14 @@ const increaseClickedCount = async (ID: Types.ObjectId) => {
 };
 
 const deleteQuantity = async (ID: Types.ObjectId,quantityToDelete: number) => {
-    const currentQuantity = await productsDal.getProductQuantity(ID)
+    const product = await productsDal.getProductQuantity(ID)
 
-    if(!currentQuantity)
+    if(!product)
         throw new RequestError('product not found', STATUS_CODES.BAD_REQUEST)
-
-    if (currentQuantity < quantityToDelete)
-        throw new RequestError(`there is only ${currentQuantity} in stock`,STATUS_CODES.BAD_REQUEST)
+    console.log(product.quantity,quantityToDelete);
+    
+    if (product.quantity < quantityToDelete)
+        throw new RequestError(`there is only ${product.quantity} in stock`,STATUS_CODES.BAD_REQUEST)
 
     return await productsDal.deleteQuantity(ID,quantityToDelete)
 }

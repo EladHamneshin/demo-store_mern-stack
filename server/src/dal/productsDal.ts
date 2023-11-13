@@ -1,6 +1,6 @@
 import { ObjectId, Types } from "mongoose";
 import Product from "../types/Product.js";
-import productModel from "../models/ProductModel.js";
+import productModel from "../models/productModel.js";
 
 const getProductByID = async (id: Types.ObjectId) => {
     return await productModel.findOne({_id: id})
@@ -15,7 +15,7 @@ const increaseClickedCount = async (id: Types.ObjectId) => {
 };
 
 const getProductQuantity = async (id:  Types.ObjectId) => {
-    return await productModel.findOne({_id : id}).select('quantity') as unknown as number
+    return await productModel.findOne({_id : id}).select('quantity')
 }
 
 const deleteQuantity = async (id: Types.ObjectId, quantityToDelete: number) => {
