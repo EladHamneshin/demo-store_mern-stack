@@ -11,8 +11,8 @@ async function getTop5categories() {
 
 async function getProductsFromCategory(name: string) {
         const response = await fetch(`/api/category/${name}`);
-        const top5categories = await response.json();
-        return top5categories;
+        const products = await response.json();
+        return products;
 }
     
 
