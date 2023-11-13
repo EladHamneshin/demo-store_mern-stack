@@ -9,6 +9,6 @@ productRouter.get('/:pid', productcontrollers.getProductByID);
 
 productRouter.patch('/:pid/click', productcontrollers.increaseClickedCount);
 
-productRouter.delete('/:pid/dec',authHandler, productcontrollers.deleteQuantity)
+productRouter.patch('/:pid/dec',authHandler, productcontrollers.deleteQuantity)
 
 export default productRouter;
