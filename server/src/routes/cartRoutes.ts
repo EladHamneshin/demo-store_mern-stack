@@ -1,14 +1,14 @@
-import express from "express";
-import { authHandler } from "../middlewares/authMiddleware.js";
-import cartController from "../controllers/cartController.js";
+import express from 'express';
+import { authHandler } from '../middlewares/authMiddleware.js';
+import cartController from '../controllers/cartController.js';
 
 const cartRouter = express.Router();
 
 cartRouter.use(authHandler);
 
-cartRouter.get("/", cartController.getCart);
-cartRouter.post("/", cartController.updateCart);
+cartRouter.get('/', cartController.getCart);
+cartRouter.post('/', cartController.updateCart);
 cartRouter.delete('/', cartController.deleteCart);
-// cartRouter.patch('/', cartController.patchCart);
+cartRouter.patch('/', cartController.patchAmount);
 
 export default cartRouter;
