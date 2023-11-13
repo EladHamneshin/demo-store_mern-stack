@@ -36,4 +36,12 @@ const deleteCart = asyncHandler(async (req, res) => {
   });
 });
 
-export default { getCart, updateCart, deleteCart };
+const patchAmount = asyncHandler(async (req, res) => {
+  const cart = await cartService.patchAmount(req.userId, req.body);
+
+  res.json({
+    cart: cart,
+  });
+});
+
+export default { getCart, updateCart, deleteCart, patchAmount };
