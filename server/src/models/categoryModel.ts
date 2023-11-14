@@ -7,7 +7,7 @@ const categorySchema = new mongoose.Schema<Category>(
     name: String ,
     products: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'product'
+        ref: 'Product'
       }],
     clickCount: Number
   },
