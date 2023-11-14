@@ -4,7 +4,7 @@ const ROUTES = {
     REGISTER: '/register',
     CATEGORY: '/category/:cname',
     PRODUCT: '/product/:pid',
-    CART: '/cart/:uid',
+    CART: '/cart',
     COMPARE: '/compare/:pid1/:pid2',
     DEFAULT: '*'
 };
