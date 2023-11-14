@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import UserInfo from '../types/UserInfo';
+import UserInfo from './types/UserInfo';
 
 
 interface UserContextProviderProps {
