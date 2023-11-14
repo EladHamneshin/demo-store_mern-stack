@@ -3,6 +3,7 @@ import Product from "../types/Product";
 import { styled } from "@mui/system";
 import { Button, Typography, Card, CardContent } from "@mui/material";
 import cartsAPI from '../api/cartsAPI';
+import { toast } from "react-toastify";
 
 type Props = {
     product: Product;
@@ -19,8 +20,12 @@ const ProductCartCard = ({ product, quantity }: Props) => {
     });
 
     const increaseQuantity = (pid: string): React.MouseEventHandler<HTMLButtonElement> => () => {
-        setCartQuantity(cartQuantity + 1);
-        cartsAPI.updateQuantity(pid, "inc");
+        if (cartQuantity <= product.quantity  ) {
+            setCartQuantity(cartQuantity + 1);
+            cartsAPI.updateQuantity(pid, "inc");
+        }else{
+            toast.error(`There are only items ${product.quantity} available for purchase`)
+        }
 
     };
 
