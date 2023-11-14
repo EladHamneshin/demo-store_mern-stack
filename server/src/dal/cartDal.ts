@@ -33,6 +33,14 @@ const deleteCart = async (userId: Types.ObjectId) => {
   );
 };
 
+const deleteCartItem = async (userId: Types.ObjectId, productId: string) => {
+  return await cartModel.findOneAndUpdate(
+    { user: userId },
+    { $pull: { items: { product_id: productId } } },
+    { new: true }
+  );
+};
+
 const incAmount = async (userId: Types.ObjectId, product_id: string) => {
   return await cartModel.findOneAndUpdate(
     { user: userId, 'items.product_id': product_id },
@@ -55,6 +63,7 @@ export default {
   getCartProducts,
   updateCart,
   deleteCart,
+  deleteCartItem,
   incAmount,
   decAmount,
 };
