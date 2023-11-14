@@ -17,12 +17,12 @@ const productSchema = new mongoose.Schema<ProductTypes>(
         description: String,
         imgSource: String,
         name: String,
-        clickedCount: Number
+        clickCount: Number
     },
     {
         timestamps: true,
          strict : false
     }
 )
-const productModel = mongoose.model('product', productSchema);
-export default productModel;
+const ProductModel = mongoose.model('Product', productSchema);
+export default ProductModel;

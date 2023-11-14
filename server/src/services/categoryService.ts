@@ -18,18 +18,18 @@ const getCategoryProducts = async (req: Request) => {
     return category;
 
 }
-const get5Categories = async () => {
-    const category = await categoryDal.get5Categories();
+const getTop5Categories = async () => {
+    const category = await categoryDal.getTop5Categories();
     if (!category)
         throw new RequestError('Category not found', STATUS_CODES.NOT_FOUND);
     return category;
 }
 
-const increaseClickedCount = async (req: Request) => {
+const increaseClickCount = async (req: Request) => {
     const { cname } = req.params;
-    const category = await categoryDal.increaseClickedCount(cname);
+    const category = await categoryDal.increaseClickCount(cname);
     if (!category)
         throw new RequestError('Category not found', STATUS_CODES.NOT_FOUND);
     return category;
 }
-export default { getCategories, getCategoryProducts, get5Categories, increaseClickedCount }
+export default { getCategories, getCategoryProducts, getTop5Categories, increaseClickCount }

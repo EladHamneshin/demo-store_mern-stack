@@ -13,10 +13,10 @@ const getProductByID = asyncHandler(async (req: Request, res: Response) => {
     res.json(product)  
 })
 
-const increaseClickedCount = asyncHandler(async (req: Request, res: Response) => {
+const increaseClickCount = asyncHandler(async (req: Request, res: Response) => {
     const {pid} = req.params
     const productId = new mongoose.Types.ObjectId(pid);
-    const increased = await productsService.increaseClickedCount(productId)
+    const increased = await productsService.increaseClickCount(productId)
 
     res.sendStatus(STATUS_CODES.OK)
 })
@@ -37,4 +37,4 @@ const getTop5Products = asyncHandler(async (req, res) => {
     });
   });
 
-export default {increaseClickedCount, getProductByID, deleteQuantity, getTop5Products}
+export default {increaseClickCount, getProductByID, deleteQuantity, getTop5Products}
