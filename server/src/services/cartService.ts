@@ -38,6 +38,11 @@ const deleteCart = async (userId: Types.ObjectId) => {
   return cart;
 };
 
+const deleteCartItem = async (userId: Types.ObjectId, productId: string) => {
+  const cart = await cartDal.deleteCartItem(userId, productId);
+  if (!cart) throw new RequestError('No cart found', STATUS_CODES.NO_CONTENT);
+  return cart;
+}
 const patchAmount = async (
   userId: Types.ObjectId,
   metaDate: { pid: string; action: string }
@@ -47,4 +52,4 @@ const patchAmount = async (
   return await cartDal.decAmount(userId, metaDate.pid);
 };
 
-export default { getCart, updateCart, deleteCart, patchAmount };
+export default { getCart, updateCart, deleteCart, deleteCartItem, patchAmount };
