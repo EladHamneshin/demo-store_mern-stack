@@ -2,7 +2,7 @@ import { useState } from "react";
 import UserInfo from "../types/UserInfo";
 
 const useAuth = () => {
-    const [userInfo, setUser] = useState(
+    const [userInfo, setUser] = useState<UserInfo>(
     localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo')!)
     : undefined);
