@@ -5,8 +5,7 @@ import usersAPI from '../api/usersAPI'
 import ROUTES from '../routes/routesModel'
 import { toast } from 'react-toastify'
 import UserInfo from '../types/UserInfo'
-import { Copyright } from '@mui/icons-material'
-import { Link ,Container, CssBaseline, Box, Avatar, Typography, TextField, FormControlLabel, Checkbox, Button, Grid } from '@mui/material'
+import { Link ,Container, CssBaseline, Box, Avatar, Typography, TextField, Button, Grid } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const LoginPage = () => {
