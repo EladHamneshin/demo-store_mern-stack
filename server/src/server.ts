@@ -7,7 +7,7 @@ import { connectDB } from './configs/db.js';
 import { errorHandler, notFound } from './middlewares/errorsMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productsRoutes.js';
-import categoryRouter from './routes/categoryRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 
 const app = express();
@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use('/api/users', userRoutes);
 app.use('/api/users/cart', cartRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/category', categoryRouter);
+app.use('/api/category', categoryRoutes);
 app.use(notFound);
 app.use(errorHandler);
 

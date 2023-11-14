@@ -12,7 +12,7 @@ const getCategoryProducts = async (name: string) => {
     return category
 };
 
-const get5Categories = async () => {
+const getTop5Categories = async () => {
     const topCategories = await CategoryModel.find({})
         .sort({ clickCount: -1 })
         .limit(5)
@@ -21,9 +21,9 @@ const get5Categories = async () => {
     return topCategories
 };
 
-const increaseClickedCount = async (name: string) => {
+const increaseClickCount = async (name: string) => {
     return await CategoryModel.findOneAndUpdate(
         { name: name },
         { $inc: { clickCount: 1 } },)
 };
-export default { getCategories, getCategoryProducts, get5Categories, increaseClickedCount };
+export default { getCategories, getCategoryProducts, getTop5Categories, increaseClickCount};

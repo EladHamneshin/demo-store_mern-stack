@@ -13,8 +13,8 @@ const getProductByID  = async (ID: Types.ObjectId) => {
     return product
 }
 
-const increaseClickedCount = async (ID: Types.ObjectId) => {
-    const increased = await productsDal.increaseClickedCount(ID)
+const increaseClickCount = async (ID: Types.ObjectId) => {
+    const increased = await productsDal.increaseClickCount(ID)
         if(!increased) throw new RequestError('product not found', STATUS_CODES.BAD_REQUEST)
     return increased;
 };
@@ -39,4 +39,4 @@ const getTop5Products = async () => {
     return Top5Products;
 }
 
-export default {getProductByID, increaseClickedCount, deleteQuantity, getTop5Products }
+export default {getProductByID, increaseClickCount, deleteQuantity, getTop5Products }

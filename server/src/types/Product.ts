@@ -7,7 +7,7 @@ interface Product {
     category: CategoryName;
     imgSource: string;
     name: string;
-    clickedCount: number;
+    clickCount: number;
 };
 
 export default Product;
