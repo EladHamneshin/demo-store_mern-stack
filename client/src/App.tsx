@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import AppBar from './components/AppBar'
 
 function App() {
-
     return (
         <>
             <AppBar/>
