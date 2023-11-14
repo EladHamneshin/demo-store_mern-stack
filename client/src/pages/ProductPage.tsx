@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, Card, CardContent, Button, IconButton, Box } from "@mui/material";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import productsAPI from "../api/productsAPI";
 import Product from "../types/Product.ts";
 import StoreMap from "../components/StoreMap.tsx";
+
+
 const ProductPage = () => {
+  const navigate = useNavigate();
   const [product, setProduct] = useState<null | Product>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const { pid } = useParams();
@@ -25,10 +28,10 @@ const ProductPage = () => {
     }
   };
   const handleAddToCart = () => {
-    // Add the product to the cart here.
+    // end handdle
   };
   const handleCompareProducts = () => {
-    // To handle the product comparing
+    navigate(`/category/${product!.category}`,{state: product})
   }
   if (!product) {
     return <div>Loading product...</div>
