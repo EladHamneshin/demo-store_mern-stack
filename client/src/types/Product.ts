@@ -1,7 +1,7 @@
 import CategoryName from "./CategoryName.js";
 
 interface Product {
-    productId: string;
+    _id: string;
     quantity: number;
     price: number;
     description: string;
