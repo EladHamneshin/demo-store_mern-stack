@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   AppBar,
   Toolbar,
@@ -19,7 +19,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LoginIcon from '@mui/icons-material/Login';
 import { useNavigate } from 'react-router-dom';
 import Logout from '@mui/icons-material/Logout';
-
+import useAuth from '../hooks/useAuth';
+import logoutUser from '../api/usersApi.ts';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -36,7 +37,7 @@ const MyAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const [userStatus, setUserStatus] = useContext('UserContext');
+  const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -45,16 +46,16 @@ const MyAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-    setUserStatus(undefined);
   };
 
   const handleLogin = () => {
     navigate('/login');
-    console.log('Login clicked');
   };
 
   const handleLogout = () => {
-    console.log('Logout clicked');
+    handleCloseUserMenu();
+    logoutUser();
+    logOut();
   };
 
   const handleCart = () => {
@@ -78,15 +79,15 @@ const MyAppBar = () => {
           </StyledBadge>
         </IconButton>
         <Button
-          sx={{ display: !userStatus && 'none' }}
+          sx={{ display: !user && 'none' }}
           color="inherit"
           startIcon={<LoginIcon />}
           onClick={handleLogin}
         >
           Login
         </Button>
-       
-        <Box sx={{ flexGrow: 0, display: userStatus && 'none' }}>
+
+        <Box sx={{ flexGrow: 0, display: user && 'none' }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar src="" />
@@ -111,7 +112,7 @@ const MyAppBar = () => {
             <MenuItem key={'email'} disabled>
               <Typography>User Email</Typography>
             </MenuItem>
-            <MenuItem key={'logOut'} onClick={handleCloseUserMenu}>
+            <MenuItem key={'logOut'} onClick={handleLogout}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
