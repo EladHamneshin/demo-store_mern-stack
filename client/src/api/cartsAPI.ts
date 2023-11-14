@@ -22,5 +22,24 @@ async function addToCart(pid: string, quantity: string) {
 
     return cart;
 }
+async function updateQuantity(pid: string, action : "inc" | "dec") {
+    const response = await fetch(`/api/users/cart`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            product_id: pid,
+            action: action
+        }),
+    });
 
-export default { getCart, addToCart }
+    const cart = await response.text();
+    console.log(cart);
+
+    return cart;
+}
+
+
+
+export default { getCart, addToCart, updateQuantity }

@@ -1,5 +1,4 @@
 import CategoryName from "./CategoryName.js";
-
 interface Product {
     _id: string;
     quantity: number;
@@ -10,5 +9,4 @@ interface Product {
     name: string;
     clickCount: number;
 };
-
 export default Product;
