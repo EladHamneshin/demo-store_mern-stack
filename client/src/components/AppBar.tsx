@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  AppBar,
+  AppBar as MUIAppBar,
   Toolbar,
   IconButton,
   Typography,
@@ -33,7 +33,7 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
-const MyAppBar = () => {
+const AppBar = () => {
   const logoPath =
     'https://i.pinimg.com/originals/c1/92/9d/c1929d3492c2f64ab65b43808c072043.jpg';
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -70,7 +70,7 @@ const MyAppBar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <MUIAppBar position="static">
       <Toolbar>
         <img
           src={logoPath}
@@ -131,8 +131,8 @@ const MyAppBar = () => {
           </Box>
         )}
       </Toolbar>
-    </AppBar>
+    </MUIAppBar>
   );
 };
 
-export default MyAppBar;
+export default AppBar;

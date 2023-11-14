@@ -30,6 +30,7 @@ const LoginPage = () => {
       const loggedUser: UserInfo = await usersAPI.loginUser(email.toString(), password.toString());
       setIsLoading(false);
       login(loggedUser);
+      toast.success('Login successful');
       navigate(ROUTES.HOME);
     } catch (err) {
       setIsLoading(false);
