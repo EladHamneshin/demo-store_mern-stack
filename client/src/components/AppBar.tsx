@@ -19,8 +19,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LoginIcon from '@mui/icons-material/Login';
 import { useNavigate } from 'react-router-dom';
 import Logout from '@mui/icons-material/Logout';
-import useAuth from '../hooks/useAuth';
-import logoutUser from '../api/usersApi.ts';
+import { useAuth } from '../hooks/useAuth';
+import usersAPI from '../api/usersAPI.ts';
+import ROUTES from '../routes/routesModel.ts';
+import { toast } from 'react-toastify';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -37,7 +39,7 @@ const MyAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const { user, logOut } = useAuth();
+  const { userInfo, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -49,17 +51,22 @@ const MyAppBar = () => {
   };
 
   const handleLogin = () => {
-    navigate('/login');
+    navigate(ROUTES.LOGIN);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     handleCloseUserMenu();
-    logoutUser();
-    logOut();
+    try {
+      await usersAPI.logoutUser();
+      logout();
+      toast.success('User logged out successfully');
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   };
 
   const handleCart = () => {
-    navigate('/cart');
+    navigate(ROUTES.CART);
   };
 
   return (
@@ -78,48 +85,51 @@ const MyAppBar = () => {
             <ShoppingCartIcon />
           </StyledBadge>
         </IconButton>
-        <Button
-          sx={{ display: !user && 'none' }}
-          color="inherit"
-          startIcon={<LoginIcon />}
-          onClick={handleLogin}
-        >
-          Login
-        </Button>
-
-        <Box sx={{ flexGrow: 0, display: user && 'none' }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar src="" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
+        {!userInfo && (
+          <Button
+            color="inherit"
+            startIcon={<LoginIcon />}
+            onClick={handleLogin}
           >
-            <MenuItem key={'email'} disabled>
-              <Typography>User Email</Typography>
-            </MenuItem>
-            <MenuItem key={'logOut'} onClick={handleLogout}>
-              <ListItemIcon>
-                <Logout fontSize="small" />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </Menu>
-        </Box>
+            Login
+          </Button>
+        )}
+
+        {userInfo && (
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar src="" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem key={'email'} disabled>
+                <Typography>{userInfo.email}</Typography>
+              </MenuItem>
+              <MenuItem key={'logOut'} onClick={handleLogout}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );
