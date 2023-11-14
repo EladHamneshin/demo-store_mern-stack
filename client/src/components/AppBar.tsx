@@ -39,7 +39,7 @@ const AppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const { userInfo, logout } = useAuth();
+  const { userInfo, logout } = useAuth();  
   const navigate = useNavigate();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -77,11 +77,11 @@ const AppBar = () => {
           alt="Logo"
           style={{ marginRight: '16px', maxHeight: '50px' }}
         />
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" onClick={() => navigate('/')}component="div" sx={{ flexGrow: 1, cursor: 'pointer'}}>
           Demo store
         </Typography>
         <IconButton color="inherit" onClick={handleCart}>
-          <StyledBadge badgeContent={1} color="warning">
+          <StyledBadge badgeContent={0} color="warning">
             <ShoppingCartIcon />
           </StyledBadge>
         </IconButton>

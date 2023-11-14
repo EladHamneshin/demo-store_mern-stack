@@ -1,44 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import cartsAPI from '../api/cartsAPI';
+import { Stack, Typography, Button } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
+import cartsAPI from '../api/cartsAPI';
+import { toast } from 'react-toastify';
+import { useAuth } from '../hooks/useAuth';
 import Cart from '../types/Cart';
-import Stack from '@mui/joy/Stack';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import CartItem from '../types/CartItem';
 
-function CartPage() {
+const CartPage = () => {
     const [cart, setCart] = useState<null | Cart>(null);
+    const [loading, setLoading] = useState(true);
+    const { userInfo } = useAuth();
+    const [totalAmount, setTotalAmount] = useState<number>(0);
+
 
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const cartData = await cartsAPI.getCart();
-                setCart(cartData);
+                if (userInfo) {
+                    const cartData = await cartsAPI.getCart();
+                    setCart(cartData);
+                } else {
+                    const localCart = localStorage.getItem('cart');
+                    if (localCart) {
+                        const localCartData = JSON.parse(localCart);
+                        setCart(localCartData);
+                    } else {
+                        setCart(null);
+                    }
+                }
             } catch (error) {
                 console.error('Error fetching cart:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchCart();
-    }, []);
+    }, [userInfo]);
 
-    if (!cart) {
+    useEffect(() => {
+        if (cart) {
+            const total = cart.items.reduce((sum, item) => {
+                return sum + item.quantity * item.product_id.price;
+            }, 0);
+            setTotalAmount(total);
+        }
+    }, [cart]);
+
+    const removeFromCart = async (productId: string) => {
+        try {
+            const updateCart = await cartsAPI.deleteProductFromCart(productId);
+            setCart(updateCart);
+
+            toast.success('Product removed from cart');
+        } catch (error) {
+            console.error('Error removing from cart:', error);
+            toast.error('Error removing product from cart');
+        }
+    };
+
+    const buyNow = async () => {
+        console.log('Product purchased!');
+        alert(`Total Amount: ${totalAmount}`);
+        const newCart = await cartsAPI.deleteCart()
+        setCart(newCart)
+    };
+
+    if (loading) {
         return <div>Loading...</div>;
     }
 
-    const buyNow = () => {
-        console.log("Product purchased!");
-    };
+    if (cart === null || cart.items.length === 0) {
+        return <Typography variant="h2">No items in the cart</Typography>;
+    }
 
     return (
-        <Stack  spacing={0}>
-            <Typography variant="body1">CartPage</Typography>
+        <Stack spacing={0} height={100}>
+            <Typography variant="h2" component="h2">
+                Cart Page
+            </Typography>
             {cart.items.map((item, index) => (
-                <ProductCartCard key={'ProductCartCard-' + index} product={item.product_id} quantity={item.quantity} />
+                <ProductCartCard
+                    key={'ProductCartCard-' + index}
+                    product={item.product_id}
+                    quantity={item.quantity}
+                    removeFromCart={removeFromCart}
+                />
             ))}
-            <Button variant="contained" onClick={buyNow}>Buy Now</Button>
+            <Button variant="contained" onClick={buyNow}>
+                Buy Now {totalAmount}
+            </Button>
         </Stack>
     );
-}
+};
 
 export default CartPage;
