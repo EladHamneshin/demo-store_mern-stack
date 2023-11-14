@@ -60,9 +60,11 @@ const CartPage = () => {
         }
     };
 
-    const buyNow = () => {
+    const buyNow = async () => {
         console.log('Product purchased!');
-        console.log('Total Amount:', totalAmount);
+        alert(`Total Amount: ${totalAmount}`);
+        const newCart = await cartsAPI.deleteCart()
+        setCart(newCart)
     };
 
     if (loading) {

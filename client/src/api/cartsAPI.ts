@@ -43,5 +43,10 @@ async function deleteProductFromCart(pid: string,) {
     const newCart = await response.json()
     return newCart
 }
+async function deleteCart() {
+    const response = await fetch(`/api/users/cart`, {method: "DELETE"});
+    const emptyCart = await response.json()
+    return emptyCart
+}
 
-export default { getCart, addToCart, updateQuantity, deleteProductFromCart }
+export default { getCart, addToCart, updateQuantity, deleteProductFromCart, deleteCart }
