@@ -70,6 +70,7 @@ const RegisterPage = () => {
       toast.success("Register success");
       navigate(ROUTES.HOME);
     } catch (err) {
+      setIsLoading(false);
       toast.error((err as Error).message);
     }
   };
