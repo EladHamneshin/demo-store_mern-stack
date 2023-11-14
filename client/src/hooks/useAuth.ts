@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { useContext } from "react";
 import UserInfo from "../types/UserInfo";
+import {UserContext} from "./UserContext";
 
 const useAuth = () => {
-    const [userInfo, setUser] = useState<UserInfo | undefined>(
-    localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo')!)
-    : undefined);
+    const context = useContext(UserContext)!;
+    const { userInfo, setUserInfo } = context
 
     const login = (user: UserInfo) => {
         localStorage.setItem('userInfo', JSON.stringify(user));
-        setUser(user)
+        setUserInfo(user)
     };
 
     const logout = () => {
         localStorage.removeItem('userInfo');
-        setUser(undefined);
+        setUserInfo(undefined);
     };
 
     return { userInfo, login, logout };
