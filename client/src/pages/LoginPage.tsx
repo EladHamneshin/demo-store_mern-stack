@@ -1,12 +1,25 @@
 import React, { useState } from 'react'
 import {  useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import usersAPI from '../api/usersAPI'
+import cartsAPI from '../api/cartsAPI'
 import ROUTES from '../routes/routesModel'
 import { toast } from 'react-toastify'
 import UserInfo from '../types/UserInfo'
 import { Link ,Container, CssBaseline, Box, Avatar, Typography, TextField, Button, Grid } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import * as localStorage from '../utils/cartLocalStorageUtils'
+import usersAPI from '../api/usersAPI'
+
+const sendCartToServer = () => {
+  if(localStorage.isCartEmpty()) return;
+  try {
+    const cart = localStorage.getCart();
+    cart.map((item) => { cartsAPI.addToCart(item.product_id._id, item.quantity.toString());})
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,6 +43,7 @@ const LoginPage = () => {
       const loggedUser: UserInfo = await usersAPI.loginUser(email.toString(), password.toString());
       setIsLoading(false);
       login(loggedUser);
+      sendCartToServer();
       toast.success('Login successful');
       navigate(ROUTES.HOME);
     } catch (err) {
