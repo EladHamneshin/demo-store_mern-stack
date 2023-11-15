@@ -2,37 +2,74 @@ import { useState, useEffect } from "react";
 import { Grid, Typography, Card, CardContent, Button, IconButton, Box } from "@mui/material";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import productsAPI from "../api/productsAPI";
 import Product from "../types/Product.ts";
 import StoreMap from "../components/StoreMap.tsx";
+import { useAuth } from "../hooks/useAuth.ts";
+import cartsAPI from "../api/cartsAPI.ts";
+import * as localstorage from "../utils/cartLocalStorageUtils.ts";
+import CartItem from "../types/CartItem.ts";
+import { toast } from 'react-toastify';
+
+
+
 const ProductPage = () => {
+  const navigate = useNavigate();
   const [product, setProduct] = useState<null | Product>(null);
   const [quantity, setQuantity] = useState<number>(1);
+  const { userInfo } = useAuth();
   const { pid } = useParams();
-  const getProduct =async (pid:string) => {
+
+  //handle get product by id from server
+  const getProduct = async (pid: string) => {
+    try {
       const product = await productsAPI.getProduct(pid!);
       setProduct(product);
+    } catch (error) {
+      console.error('Failed to fetch')
+    }
   }
-  
+
+  //get the product after the page is rendered
   useEffect(() => {
     getProduct(pid!)
   }, []);
-  
+
+  //handle decrease quantity by clicking on the minus button (when quantity shouldnt be lower then 1)
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity(prevQty => prevQty - 1);
     }
   };
-  const handleAddToCart = () => {
-    // Add the product to the cart here.
+
+  //handle add to cart. (if user logged in, products is being added to db at the server, else its stored in localstorage)
+  const handleAddToCart = async () => {
+    if (userInfo) {
+      try {
+        await cartsAPI.addToCart(product!._id, quantity.toString());
+        toast.success('Added to cart!')
+        setQuantity(1);
+      } catch (error) {
+        console.error('failed to add to cart');
+        toast.error('Failed to add')
+      };
+    } else {
+      const itemForCart: CartItem = {product_id: product!, quantity: quantity};
+      localstorage.addToCart(itemForCart);
+      setQuantity(1)
+    }
   };
+
+  //Navigate the user to choose another product to compare them
   const handleCompareProducts = () => {
-    // To handle the product comparing
-  }
+    navigate(`/category/${product!.category}`, { state: product })
+  };
+
   if (!product) {
     return <div>Loading product...</div>
   };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={6}>
@@ -53,13 +90,13 @@ const ProductPage = () => {
               <Box>{quantity}</Box>
               <IconButton><AddCircleRoundedIcon onClick={() => setQuantity(quantity + 1)}></AddCircleRoundedIcon></IconButton>
             </div>
-            <div style={{margin:"5px",alignItems:'space-around'}}>
-            <Button variant="contained" color="primary" onClick={handleAddToCart}>
-              Add to Cart
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleCompareProducts}>
-              Compare similar products
-            </Button>
+            <div style={{ margin: "5px", alignItems: 'space-around' }}>
+              <Button variant="contained" color="primary" onClick={handleAddToCart}>
+                Add to Cart
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleCompareProducts}>
+                Compare similar products
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -70,4 +107,5 @@ const ProductPage = () => {
     </Grid>
   );
 };
+
 export default ProductPage;
