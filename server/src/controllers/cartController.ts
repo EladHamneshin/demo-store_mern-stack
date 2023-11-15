@@ -7,11 +7,7 @@ import cartService from '../services/cartService.js';
 // @access  Private
 const getCart = asyncHandler(async (req, res) => {
   const cart = await cartService.getCart(req.userId);
-
-  res.json({
-    cartId: cart?.id,
-    items: cart?.items.map((item) => item),
-  });
+  res.json(cart);
 });
 
 // @desc    Update shopping cart
@@ -19,10 +15,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @access  Private
 const updateCart = asyncHandler(async (req, res) => {
   const cart = await cartService.updateCart(req.userId, req.body);
-
-  res.status(STATUS_CODES.CREATED).json({
-    cart: cart,
-  });
+  res.status(STATUS_CODES.CREATED).json(cart);
 });
 
 // @desc    Delete shopping cart
@@ -30,10 +23,7 @@ const updateCart = asyncHandler(async (req, res) => {
 // @access  Private
 const deleteCart = asyncHandler(async (req, res) => {
   const emptyCart = await cartService.deleteCart(req.userId);
-
-  res.json({
-    cart: emptyCart,
-  });
+  res.json(emptyCart);
 });
 
 // @desc    Delete single item from shopping cart
@@ -41,10 +31,7 @@ const deleteCart = asyncHandler(async (req, res) => {
 // @access  Private
 const deleteCartItem = asyncHandler(async (req, res) => {
   const cart = await cartService.deleteCartItem(req.userId, req.params.pid);
-
-  res.json({
-    cart: cart,
-  });
+  res.json(cart);
 });
 
 // @desc    increase/decrease item quantity amount in cart
@@ -52,10 +39,7 @@ const deleteCartItem = asyncHandler(async (req, res) => {
 // @access  Private
 const patchAmount = asyncHandler(async (req, res) => {
   const cart = await cartService.patchAmount(req.userId, req.body);
-
-  res.json({
-    cart: cart,
-  });
+  res.json(cart);
 });
 
 export default { getCart, updateCart, deleteCart, patchAmount, deleteCartItem };
