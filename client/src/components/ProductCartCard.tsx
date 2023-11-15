@@ -9,18 +9,12 @@ import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 type Props = {
     product: Product;
     quantity: number;
-    removeFromCart:  (productId: string) => Promise<void>;
+    removeFromCart: (productId: string) => Promise<void>;
 };
 
 const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
     const [cartQuantity, setCartQuantity] = useState<number>(quantity);
     const { userInfo } = useAuth();
-
-    const StyledCard = styled(Card)({
-        backgroundColor: '#fff',
-        borderRadius: 4,
-        width: '80%',
-    });
 
     const increaseQuantity = async (productId: string) => {
         if (cartQuantity < product.quantity) {
@@ -32,7 +26,8 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
                     console.error('Error increasing quantity:', error);
                 }
             } else {
-                cartLocalStorageUtils.decQuantityOfProduct(productId);
+                cartLocalStorageUtils.incQuantityOfProduct(productId);
+                setCartQuantity(cartQuantity + 1)
             }
         } else {
             toast.error(`There are only ${product.quantity} items available for purchase`);
@@ -40,26 +35,34 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
     }
     const decreaseQuantity = async (productId: string) => {
         if (cartQuantity > 1) {
-            try {
-                setCartQuantity(cartQuantity - 1);
-                await cartsAPI.updateQuantity(productId, 'dec');
-            } catch (error) {
-                console.error('Error decreasing quantity:', error);
+            if (userInfo) {
+                try {
+                    setCartQuantity(cartQuantity - 1);
+                    await cartsAPI.updateQuantity(productId, 'dec');
+                } catch (error) {
+                    console.error('Error decreasing quantity:', error);
+                }
+            } else {
+                if (cartQuantity > 1) {
+                    cartLocalStorageUtils.decQuantityOfProduct(productId);
+                    setCartQuantity(cartQuantity - 1);
+                }
             }
         } else {
-            cartLocalStorageUtils.decQuantityOfProduct(productId);
+            toast.error('Quantity cannot be less than 1');
         }
     };
+    
 
-    const deleteFromCart = async (productId: string) => {
+        const deleteFromCart = async (productId: string) => {
 
-           await removeFromCart(productId);
-     
-    }
-    return (<>
+            await removeFromCart(productId);
+
+        }
+        return (<>
             <CardContent >
                 <div>
-                
+
                     <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
                         -
                     </Button>
@@ -76,7 +79,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
                 <Typography variant="body1">{product.name}</Typography>
                 <img src={product.imgSource} alt="" />
             </CardContent>
-    </>);
-};
+        </>);
+    };
 
-export default ProductCartCard;
+    export default ProductCartCard;
