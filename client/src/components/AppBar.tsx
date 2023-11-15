@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LoginIcon from '@mui/icons-material/Login';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useNavigate } from 'react-router-dom';
 import Logout from '@mui/icons-material/Logout';
 import { useAuth } from '../hooks/useAuth';
@@ -72,11 +73,7 @@ const AppBar = () => {
   return (
     <MUIAppBar position="static">
       <Toolbar>
-        <img
-          src={logoPath}
-          alt="Logo"
-          style={{ marginRight: '16px', maxHeight: '50px' }}
-        />
+        <StorefrontIcon/>
         <Typography variant="h6" onClick={() => navigate('/')}component="div" sx={{ flexGrow: 1, cursor: 'pointer'}}>
           Demo store
         </Typography>
