@@ -4,15 +4,21 @@ import { useEffect, useState } from 'react';
 import categoriesAPI from '../api/categoriesAPI';
 import Category from '../types/Category';
 
+const handleClick = async (category: Category) => {
+  try {
+    await categoriesAPI.patchCategoryClick(category.name);
+  } catch (err) {
+    console.error((err as Error).message);
+  }
+};
 
 export default function CategoryNav() {
-  const [categories, setCategories] = useState<Category[] | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+
   useEffect(() => {
     categoriesAPI
       .getCategories()
-      .then(({ categories }: { categories: Category[] }) =>
-        setCategories(categories)
-      )
+      .then((categories) => setCategories(categories))
       .catch((err) => console.log(err));
   }, []);
 
@@ -28,8 +34,13 @@ export default function CategoryNav() {
         },
       }}
     >
-      {categories?.map((category) => (
-        <Link href={`/category/${category.name}`} underline="none" key={category._id}>
+      {categories.map((category) => (
+        <Link
+          href={`/category/${category.name}`}
+          underline="none"
+          key={category._id}
+          onClick={() => handleClick(category)}
+        >
           {category.name}
         </Link>
       ))}
