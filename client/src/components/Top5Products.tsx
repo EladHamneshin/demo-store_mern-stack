@@ -26,7 +26,9 @@ function Top5ProductsPage() {
             <h1>Top 5 Products</h1>
             {top5Products && (
                 <ul style={{ listStyleType: 'none', padding: 0, display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                    {top5Products.map((product) => (<ProductCard product={product}/>))}
+                    {top5Products.map((product, index) => (<ProductCard 
+                    key={"product" + index}
+                    product={product}/>))}
                         </ul>
             )}
         </div>
