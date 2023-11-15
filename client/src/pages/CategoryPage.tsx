@@ -24,7 +24,7 @@ const CategoryPage = () => {
     {products.map((product, index)=>{
     return <ProductCard key={"cproduct"+index} 
     product={product} 
-    navigateOnClick={!!location.state? `/compare/${location.state._id}/${product._id}`: `/product/${product._id}`}/>
+    navigateOnClick={location.state || `/compare/${location.state._id}/${product._id}`}/>
     })
   }</ProductCardsContainer>
   </>

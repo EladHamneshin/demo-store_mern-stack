@@ -9,14 +9,14 @@ import productsAPI from '../api/productsAPI';
 
 type props = {
   product: Product;
-  navigateOnClick: To;
+  navigateOnClick?: To;
 };
 
 export default function ProductCard({ product, navigateOnClick }: props) {
   const navigate = useNavigate();
   const handleCLick = async () => {
     try {
-      navigate(navigateOnClick);
+      navigate(navigateOnClick || `/product/${product._id}`);
       await productsAPI.patchProductClick(product._id);
     } catch (err) {
       console.error((err as Error).message);
