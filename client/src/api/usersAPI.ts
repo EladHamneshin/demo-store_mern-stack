@@ -1,3 +1,5 @@
+import handleApiRes from "./apiResHandler";
+
 async function loginUser(email: string, password: string) {
     const response = await fetch("/api/users/auth/login", {
         method: "POST",
@@ -6,22 +8,16 @@ async function loginUser(email: string, password: string) {
         },
         body: JSON.stringify({ email, password }),
     });
-    const user = await response.json();
-    console.log(user);
-
-    return user
+    return await handleApiRes(response);
 }
 async function logoutUser() {
     const response = await fetch("/api/users/auth/logout", { method: "POST" });
-    const status = await response.json();
-    console.log(status.message);
+    return await handleApiRes(response);
 }
 
 async function getUser() {
     const response = await fetch("/api/users/");
-    const user = await response.json();
-    console.log(user);
-    return user
+    return await handleApiRes(response);
 }
 
 async function register(email: string, password: string) {
@@ -32,9 +28,7 @@ async function register(email: string, password: string) {
         },
         body: JSON.stringify({ email, password }),
     });
-    const user = await response.json();
-    console.log(user);
-    return user
+    return await handleApiRes(response);
 }
 
 

@@ -3,13 +3,13 @@ import productModel from "../models/productModel.js";
 
 const getCategories = async () => {
     const categories = await CategoryModel.find({}).select('name');
-    return categories
+    return categories;
 };
 
 const getCategoryProducts = async (name: string) => {
     const a = await productModel.find();
     const category = await CategoryModel.findOne({ name }).populate('products').exec();
-    return category
+    return category;
 };
 
 const getTop5Categories = async () => {
@@ -18,12 +18,12 @@ const getTop5Categories = async () => {
         .limit(5)
         .select('name')
         .exec();
-    return topCategories
+    return topCategories;
 };
 
 const increaseClickCount = async (name: string) => {
     return await CategoryModel.findOneAndUpdate(
         { name: name },
-        { $inc: { clickCount: 1 } },)
+        { $inc: { clickCount: 1 } },);
 };
 export default { getCategories, getCategoryProducts, getTop5Categories, increaseClickCount};
