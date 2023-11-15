@@ -9,7 +9,7 @@ import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 type Props = {
     product: Product;
     quantity: number;
-    removeFromCart: (productId: string) => void;
+    removeFromCart:  (productId: string) => Promise<void>;
 };
 
 const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
@@ -53,15 +53,16 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
 
     const deleteFromCart = async (productId: string) => {
         if (userInfo) {
-            removeFromCart(productId);
+           await removeFromCart(productId);
         } else {
             cartLocalStorageUtils.removeFromCart(productId)
         }
     }
-    return (
-        <StyledCard className="productCartCard">
-            <CardContent>
+
+    return (<>
+            <CardContent >
                 <div>
+                
                     <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
                         -
                     </Button>
@@ -78,8 +79,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
                 <Typography variant="body1">{product.name}</Typography>
                 <img src={product.imgSource} alt="" />
             </CardContent>
-        </StyledCard>
-    );
+    </>);
 };
 
 export default ProductCartCard;

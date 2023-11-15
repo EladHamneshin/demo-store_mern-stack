@@ -19,9 +19,12 @@ const CartPage = () => {
             try {
                 if (userInfo) {
                     const cartData = await cartsAPI.getCart();
+
                     setCart(cartData);
                 } else {
                     const localCart = localStorage.getItem('cart');
+                    console.log(localCart);
+                    
                     if (localCart) {
                         const localCartData = JSON.parse(localCart);
                         setCart(localCartData);
@@ -50,9 +53,8 @@ const CartPage = () => {
 
     const removeFromCart = async (productId: string) => {
         try {
-            const updateCart = await cartsAPI.deleteProductFromCart(productId);
-            setCart(updateCart);
-
+            const updateCart = await cartsAPI.deleteProductFromCart(productId);            
+            setCart(updateCart.cart);
             toast.success('Product removed from cart');
         } catch (error) {
             console.error('Error removing from cart:', error);
@@ -64,8 +66,11 @@ const CartPage = () => {
         console.log('Product purchased!');
         alert(`Total Amount: ${totalAmount}`);
         const newCart = await cartsAPI.deleteCart()
-        setCart(newCart)
+        
+        
+        setCart(newCart.cart)
     };
+
 
     if (loading) {
         return <div>Loading...</div>;
