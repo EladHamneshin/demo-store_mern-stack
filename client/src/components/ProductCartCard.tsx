@@ -39,7 +39,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
         };
     }
     const decreaseQuantity = async (productId: string) => {
-        if (cartQuantity > 0) {
+        if (cartQuantity > 1) {
             try {
                 setCartQuantity(cartQuantity - 1);
                 await cartsAPI.updateQuantity(productId, 'dec');
@@ -52,13 +52,10 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
     };
 
     const deleteFromCart = async (productId: string) => {
-        if (userInfo) {
-           await removeFromCart(productId);
-        } else {
-            cartLocalStorageUtils.removeFromCart(productId)
-        }
-    }
 
+           await removeFromCart(productId);
+     
+    }
     return (<>
             <CardContent >
                 <div>
