@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Stack, Typography, Button } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/useAuth';
 import Cart from '../types/Cart';
-import CartItem from '../types/CartItem';
 
 const CartPage = () => {
     const [cart, setCart] = useState<null | Cart>(null);
@@ -54,7 +53,7 @@ const CartPage = () => {
     const removeFromCart = async (productId: string) => {
         try {
             const updateCart = await cartsAPI.deleteProductFromCart(productId);            
-            setCart(updateCart.cart);
+            setCart(updateCart);
             toast.success('Product removed from cart');
         } catch (error) {
             console.error('Error removing from cart:', error);
@@ -68,7 +67,7 @@ const CartPage = () => {
         const newCart = await cartsAPI.deleteCart()
         
         
-        setCart(newCart.cart)
+        setCart(newCart)
     };
 
 
