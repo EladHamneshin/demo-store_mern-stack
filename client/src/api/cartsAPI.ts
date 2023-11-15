@@ -9,7 +9,7 @@ async function getCart(): Promise<Cart> {
 
 async function addToCart(pid: string, quantity: string): Promise<Cart> {
     const response = await fetch(`/api/users/cart`, {
-        method: "PATCH",
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
@@ -28,7 +28,7 @@ async function updateQuantity(pid: string, action : "inc" | "dec"):Promise<Cart>
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            product_id: pid,
+            pid: pid,
             action: action
         }),
     });
@@ -38,8 +38,10 @@ async function updateQuantity(pid: string, action : "inc" | "dec"):Promise<Cart>
 
 async function deleteProductFromCart(pid: string):Promise<Cart> {
     const response = await fetch(`/api/users/cart/${pid}`, {method: "DELETE"});
-    return await handleApiRes(response);
+    const data = await handleApiRes(response);
+    return data
 }
+
 
 async function deleteCart():Promise<Cart> {
     const response = await fetch(`/api/users/cart`, {method: "DELETE"});
