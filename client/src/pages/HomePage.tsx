@@ -1,11 +1,11 @@
-import React from 'react'
 import Top5Products from '../components/Top5Products'
+import Top5Categories from '../components/Top5Categories'
 type Props = {}
 
 const HomePage = (props: Props) => {
   return (
     <>
-    <div>HomePage</div>
+    <Top5Categories/>
     <Top5Products/>
     </>
   )
