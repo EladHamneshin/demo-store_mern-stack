@@ -1,21 +1,22 @@
+import Product from "../types/Product";
 import handleApiRes from "./apiResHandler";
 
-async function getTop5Products() {
-    const response = await fetch("/api/products/top5");
+async function getTop5Products(): Promise<Product[]> {
+    const response = await fetch('/api/products/top5');
     return await handleApiRes(response);
 }
 
-async function getProduct(pid: string) {
+async function getProduct(pid: string): Promise<Product> {
     const response = await fetch(`/api/products/${pid}`);
     return await handleApiRes(response);
 }
 
-async function patchProductClick(pid: string) {
+async function patchProductClick(pid: string): Promise<Product>  {
     const response = await fetch(`/api/products/${pid}/click`, { method: "PATCH" });
     return await handleApiRes(response);
 }
 
-async function checkingAndUpdatingProduct(pid: string, quantity: string) {
+async function checkingAndUpdatingProduct(pid: string, quantity: string): Promise<Product>  {
     const response = await fetch(`/api/products/${pid}/dec`, {
         method: "PATCH",
         headers: {
