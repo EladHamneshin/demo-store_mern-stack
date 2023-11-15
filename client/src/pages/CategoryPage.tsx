@@ -9,7 +9,7 @@ const CategoryPage = () => {
   const { cname } = useParams();
   const [products, setProducts] = useState<Product[]>([]);
   const location = useLocation();
-  // if location.state is not undefined, then we are in compare mode
+  // if location.state is not undefined, then we are in compare mode and it stores the product we want to compare to
   const isCompareMode = useRef(!!location.state)
 
   useEffect(() => {
@@ -21,12 +21,16 @@ const CategoryPage = () => {
 
   return (
     <>
-      {isCompareMode && <h1>please choose product to compare </h1>}
+      {isCompareMode.current && <h1>please choose product to compare </h1>}
       <ProductCardsContainer>
         {products.map((product, index) => {
+          if (isCompareMode.current && location.state._id === product._id) return null
+
           return <ProductCard key={"cproduct" + index}
             product={product}
-            navigateToOnClick={isCompareMode ? `/compare/${location.state._id}/${product._id}` : undefined} />
+            navigateToOnClick={isCompareMode.current ? 
+              `/compare/${location.state._id}/${product._id}` 
+              : undefined} />
         })
         }</ProductCardsContainer>
     </>
