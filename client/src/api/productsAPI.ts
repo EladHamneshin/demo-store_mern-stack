@@ -1,24 +1,23 @@
+import handleApiRes from "./apiResHandler";
+
 async function getTop5Products() {
     const response = await fetch("/api/products/top5");
-    const top5Products = await response.json();
-    console.log(top5Products);
-
-    return top5Products
+    return await handleApiRes(response);
 }
 
 async function getProduct(pid: string) {
     const response = await fetch(`/api/products/${pid}`);
-    const product = await response.json();
-    return product
+    return await handleApiRes(response);
 }
 
 async function patchProductClick(pid: string) {
     const response = await fetch(`/api/products/${pid}/click`, { method: "PATCH" });
+    //TODO change to handleApiRes
     const product = await response.text();
     return product
 }
 
-async function checkingAndUpdatingAProduct(pid: string, quantity: string) {
+async function checkingAndUpdatingProduct(pid: string, quantity: string) {
     const response = await fetch(`/api/products/${pid}/dec`, {
         method: "PATCH",
         headers: {
@@ -27,6 +26,7 @@ async function checkingAndUpdatingAProduct(pid: string, quantity: string) {
         body: JSON.stringify({ quantityToDelete: quantity }),
       });
   
+      //TODO change to handleApiRes
       const product = await response.text();
       console.log(product);
       
@@ -34,4 +34,4 @@ async function checkingAndUpdatingAProduct(pid: string, quantity: string) {
 }
 
 
-export default { getTop5Products, getProduct, patchProductClick, checkingAndUpdatingAProduct }
+export default { getTop5Products, getProduct, patchProductClick, checkingAndUpdatingProduct }

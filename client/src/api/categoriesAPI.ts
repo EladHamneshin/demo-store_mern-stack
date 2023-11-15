@@ -1,18 +1,18 @@
+import Product from "../types/Product";
+import handleApiRes from "./apiResHandler";
+
 async function getCategories() {
     const response = await fetch("/api/category");
-    const categories = await response.json();
-    return categories
+    return await handleApiRes(response);
 }
 async function getTop5categories() {
     const response = await fetch("/api/category/top5");
-    const top5categories = await response.json();
-    return top5categories
+    return await handleApiRes(response);
 }
 
-async function getProductsFromCategory(name: string) {
+async function getProductsFromCategory(name: string): Promise<Product[]>{
         const response = await fetch(`/api/category/${name}`);
-        const products = await response.json();
-        return products;
+        return await handleApiRes(response);
 }
     
 

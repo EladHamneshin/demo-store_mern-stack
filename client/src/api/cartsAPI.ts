@@ -1,8 +1,9 @@
+import handleApiRes from "./apiResHandler";
+
+
 async function getCart() {
-    const response = await fetch("/api/users/cart ");
-    const cart = await response.json();
-    console.log(cart);
-    return cart
+    const response = await fetch('/api/users/cart');
+    return await handleApiRes(response);
 }
 
 async function addToCart(pid: string, quantity: string) {
@@ -16,12 +17,9 @@ async function addToCart(pid: string, quantity: string) {
             quantity: quantity
         }),
     });
-
-    const cart = await response.text();
-    console.log(cart);
-
-    return cart;
+    return await handleApiRes(response);
 }
+
 async function updateQuantity(pid: string, action : "inc" | "dec") {
     const response = await fetch(`/api/users/cart`, {
         method: "PATCH",
@@ -34,14 +32,12 @@ async function updateQuantity(pid: string, action : "inc" | "dec") {
         }),
     });
 
-    const cart = await response.text();
-    return cart;
+    return await handleApiRes(response);
 }
 
 async function deleteProductFromCart(pid: string,) {
     const response = await fetch(`/api/users/cart/${pid}`, {method: "DELETE"});
-    const newCart = await response.json()
-    return newCart
+    return await handleApiRes(response);
 }
 
 export default { getCart, addToCart, updateQuantity, deleteProductFromCart }
