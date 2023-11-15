@@ -12,9 +12,7 @@ async function getProduct(pid: string) {
 
 async function patchProductClick(pid: string) {
     const response = await fetch(`/api/products/${pid}/click`, { method: "PATCH" });
-    //TODO change to handleApiRes
-    const product = await response.text();
-    return product
+    return await handleApiRes(response);
 }
 
 async function checkingAndUpdatingProduct(pid: string, quantity: string) {
@@ -26,11 +24,7 @@ async function checkingAndUpdatingProduct(pid: string, quantity: string) {
         body: JSON.stringify({ quantityToDelete: quantity }),
       });
   
-      //TODO change to handleApiRes
-      const product = await response.text();
-      console.log(product);
-      
-      return product;
+      return await handleApiRes(response);
 }
 
 
