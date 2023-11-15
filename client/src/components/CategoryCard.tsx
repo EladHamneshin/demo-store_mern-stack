@@ -5,14 +5,21 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Category from '../types/Category';
 import { useNavigate } from 'react-router-dom';
+import categoriesAPI from '../api/categoriesAPI';
 
 type props = {
   category: Category;
 };
 export default function CategoryCard({ category }: props) {
   const navigate = useNavigate();
-  const handleClick = () => {
-    navigate(`/category/${category.name}`);
+  const handleClick = async () => {
+    try {
+        navigate(`/category/${category.name}`);
+        await categoriesAPI.patchCategoryClick(category.name);
+      } catch (err) {
+        console.error((err as Error).message);
+      }
+    
   };
   return (
     <Card sx={{ maxWidth: 345 }}>
