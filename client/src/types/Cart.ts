@@ -1,7 +1,8 @@
 import CartItem from './CartItem.ts';
 
 interface Cart {
-    cartId: string;
+    _id: string;
+    user: string;
     items: CartItem[];
 }
 
