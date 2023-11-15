@@ -66,33 +66,33 @@ const ComparePage = () => {
       <Paper style={{ margin: 50 }} elevation={12}>
         <Table>
           <TableHead >
-            <TableRow>
+            <TableRow >
               <TableCell align='center'>
                 Name
               </TableCell>
-              {products.map(product => <TableCell align='center'>{product!.name}</TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.name}</TableCell>)}
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
               <TableCell></TableCell>
-              {products.map(product => <TableCell align='center'><img src={product.imgSource} alt={`${product.name} picture`} /></TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'><img src={product.imgSource} alt={`${product.name} picture`} /></TableCell>)}
             </TableRow>
             <TableRow>
               <TableCell align='center'>Description</TableCell>
-              {products.map(product => <TableCell align='center'>{product!.description}</TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.description}</TableCell>)}
             </TableRow>
             <TableRow>
               <TableCell align='center'>Popularity</TableCell>
-              {products.map(product => <TableCell align='center'>{product!.clickCount}</TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.clickCount}</TableCell>)}
             </TableRow>
             <TableRow>
               <TableCell align='center'>Price</TableCell>
-              {products.map(product => <TableCell align='center'>{product!.price}</TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.price}</TableCell>)}
             </TableRow>
             <TableRow>
               <TableCell></TableCell>
-              {products.map(product => <TableCell align='center'><Button variant='contained' onClick={() => handleAddClick(product)}>Add to cart</Button></TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'><Button variant='contained' onClick={() => handleAddClick(product)}>Add to cart</Button></TableCell>)}
             </TableRow>
           </TableBody>
         </Table>
