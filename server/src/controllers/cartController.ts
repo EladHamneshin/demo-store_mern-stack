@@ -14,7 +14,7 @@ const getCart = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/cart
 // @access  Private
 const updateCart = asyncHandler(async (req, res) => {
-  const cart = await cartService.updateCart(req.userId, req.body);
+  const cart = await cartService.updateAmount(req.userId, req.body);
   res.status(STATUS_CODES.CREATED).json(cart);
 });
 

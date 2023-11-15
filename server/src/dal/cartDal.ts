@@ -25,6 +25,13 @@ const updateCart = async (userId: Types.ObjectId, items: Cart['items']) => {
   );
 };
 
+const updateAmount = async (userId: Types.ObjectId, product_id: string, amount: number) => {
+  return await cartModel.findOneAndUpdate(
+    { user: userId, 'items.product_id': product_id },
+    { $inc: { 'items.$.quantity': amount } },
+    { new: true }
+  );
+};
 const deleteCart = async (userId: Types.ObjectId) => {
   return await cartModel.findOneAndUpdate(
     { user: userId },
@@ -63,6 +70,7 @@ export default {
   getCartProducts,
   updateCart,
   deleteCart,
+  updateAmount,
   deleteCartItem,
   incAmount,
   decAmount,

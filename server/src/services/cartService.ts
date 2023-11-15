@@ -11,6 +11,16 @@ const getCart = async (userId: Types.ObjectId) => {
   return cart;
 };
 
+const updateAmount = async (userId: Types.ObjectId, item: CartItem) => {
+  console.log(item,'service');
+  
+  const updatedCart = await cartDal.updateAmount(userId, item.product_id.toString(), item.quantity);
+  if(!updatedCart)
+    throw new RequestError('Cart not found', STATUS_CODES.NO_CONTENT);
+
+  return updatedCart;
+};
+
 const updateCart = async (userId: Types.ObjectId, item: CartItem) => {
   const dbCart: Cart | null = await cartDal.getCartProducts(userId);
   if (!dbCart)
@@ -52,4 +62,4 @@ const patchAmount = async (
   return await cartDal.decAmount(userId, metaDate.pid);
 };
 
-export default { getCart, updateCart, deleteCart, deleteCartItem, patchAmount };
+export default { getCart,updateAmount, updateCart, deleteCart, deleteCartItem, patchAmount };
