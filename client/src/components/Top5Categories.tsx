@@ -12,12 +12,12 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 export default function Top5Categories() {
-  const [top5Categories, setTop5Categories] = useState<Category[] | null>(null);
+  const [top5Categories, setTop5Categories] = useState<Category[] >([]);
 
   useEffect(() => {
     const fetchTopCategories = async () => {
       try {
-        const categories: Category[] = await categoriesAPI.getTop5categories();
+        const categories = await categoriesAPI.getTop5categories();
         setTop5Categories(categories);
       } catch (err) {
         console.error('Error fetching top 5 categories');
