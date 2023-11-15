@@ -17,9 +17,17 @@ const isCartEmpty = () => {
 
 const addToCart = (cartItem: CartItem) => {
     const cart = getCart();
-    cart.push(cartItem);
+    const existingItemIndex = cart.findIndex(item => item.product_id._id === cartItem.product_id._id);
+
+    if (existingItemIndex !== -1) {
+        cart[existingItemIndex].quantity++;
+    } else {
+        cart.push(cartItem);
+    }
+
     localStorage.setItem(CART_KEY, JSON.stringify(cart));
 };
+
 
 const removeFromCart = (ptoductId: string) => {
     const cart = getCart();
@@ -42,7 +50,11 @@ const decQuantityOfProduct = (ptoductId: string) =>{
 }
 
 const clearCart = () => {
+    console.log("lllll");
+    
     localStorage.removeItem(CART_KEY);
+    console.log("pppp");
+    
 };
 
 export {getCart, isCartEmpty, addToCart, removeFromCart, incQuantityOfProduct, decQuantityOfProduct, clearCart};

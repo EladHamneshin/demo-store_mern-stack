@@ -61,6 +61,7 @@ const ProductPage = () => {
     } else {
       const itemForCart: CartItem = { product_id: product!, quantity: quantity };
       localstorage.addToCart(itemForCart);
+      toast.success('Added to cart!');
       setQuantity(1);
     };
   };

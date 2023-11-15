@@ -4,7 +4,6 @@ import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/useAuth';
-import Cart from '../types/Cart';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 
@@ -76,6 +75,7 @@ const CartPage = () => {
             setCartItems(newCart.items)
         } else {
             cartLocalStorageUtils.clearCart();
+            setCartItems([])
         };
     }
         if (loading) {
