@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, Button, Card, CardContent } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
@@ -12,7 +12,6 @@ const CartPage = () => {
     const [loading, setLoading] = useState(true);
     const { userInfo } = useAuth();
     const [totalAmount, setTotalAmount] = useState<number>(0);
-
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -52,13 +51,11 @@ const CartPage = () => {
         try {
             if (userInfo) {
                 const updateCart = await cartsAPI.deleteProductFromCart(productId);
-                
                 setCartItems(updateCart.items);
             } else {
                 const updateCart = cartLocalStorageUtils.removeFromCart(productId);
                 const newCart = cartLocalStorageUtils.getCart();
-
-                setCartItems(newCart)
+                setCartItems(newCart);
             }
             toast.success('Product removed from cart');
         } catch (error) {
@@ -71,39 +68,40 @@ const CartPage = () => {
         if (userInfo) {
             console.log('Product purchased!');
             alert(`Total Amount: ${totalAmount}`);
-            const newCart = await cartsAPI.deleteCart()
-            setCartItems(newCart.items)
+            const newCart = await cartsAPI.deleteCart();
+            setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
-            setCartItems([])
-        };
-    }
-        if (loading) {
-            return <div>Loading...</div>;
+            setCartItems([]);
         }
-
-        if (cartItems.length === 0) {
-            return <Typography variant="h2">No items in the cart</Typography>;
-        }
-
-        return (
-            <Stack spacing={0} height={100}>
-                <Typography variant="h2" component="h2">
-                    Cart Page
-                </Typography>
-                {cartItems.map((item, index) => (
-                    <ProductCartCard
-                        key={'ProductCartCard-' + index}
-                        product={item.product_id}
-                        quantity={item.quantity}
-                        removeFromCart={removeFromCart}
-                    />
-                ))}
-                <Button variant="contained" onClick={buyNow}>
-                    Buy Now {totalAmount}
-                </Button>
-            </Stack>
-        );
     };
 
-    export default CartPage;
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (cartItems.length === 0) {
+        return <Typography variant="h2">No items in the cart</Typography>;
+    }
+
+    return (
+        <Stack spacing={2}>
+            <Typography variant="h2" component="h2">
+                Cart Page
+            </Typography>
+            {cartItems.map((item, index) => (
+                <ProductCartCard
+                    key={'ProductCartCard-' + index}
+                    product={item.product_id}
+                    quantity={item.quantity}
+                    removeFromCart={removeFromCart}
+                />
+            ))}
+            <Button variant="contained" onClick={buyNow}>
+                Buy Now {totalAmount}
+            </Button>
+        </Stack>
+    );
+};
+
+export default CartPage;

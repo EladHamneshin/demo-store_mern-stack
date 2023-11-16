@@ -8,6 +8,9 @@ async function getCart(): Promise<Cart> {
 }
 
 async function addToCart(pid: string, quantity: string): Promise<Cart> {
+    console.log(pid);
+    console.log(quantity);
+
     const response = await fetch(`/api/users/cart`, {
         method: "POST",
         headers: {
@@ -18,6 +21,9 @@ async function addToCart(pid: string, quantity: string): Promise<Cart> {
             quantity: quantity
         }),
     });
+    const cart = await response.json()
+    console.log(cart,"ppp");
+    
     return await handleApiRes(response);
 }
 
