@@ -17,14 +17,14 @@ const ComparePage = () => {
   const { userInfo } = useAuth();
 
 
-  const handleAddClick = (product: Product) => {
+  const handleAddClick = async (product: Product) => {
     if (product.quantity < 1){
       toast.error('No items in stock');
     };
 
     if (userInfo) {
       try {
-        cartsAPI.addToCart(product._id, '1');
+        await cartsAPI.addToCart(product._id, '1');
         toast.success('Added to cart!');
       } catch (error) {
         console.error('Failed to fetch',error);
