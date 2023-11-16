@@ -6,9 +6,12 @@ import ProductCard from '../components/ProductCard';
 import ProductCardsContainer from '../components/ProductCardsContainer';
 import { Box, CircularProgress } from '@mui/material';
 
+
 const CategoryPage = () => {
   const { cname } = useParams();
   const [products, setProducts] = useState<Product[]>([]);
+
+  const [filteredProducts, setFilteredProducts] =useState<Product[]>([]);
   const location = useLocation();
   // if location.state is not undefined, then we are in compare mode and it stores the product we want to compare to
   const isCompareMode = useRef(!!location.state)
@@ -27,6 +30,7 @@ const CategoryPage = () => {
 }
   return (
     <>
+
       {isCompareMode.current && <h1>please choose product to compare </h1>}
       <ProductCardsContainer>
         {products.map((product, index) => {
@@ -44,5 +48,6 @@ const CategoryPage = () => {
 
   )
 }
+
 
 export default CategoryPage;

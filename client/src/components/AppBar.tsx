@@ -40,8 +40,6 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 }));
 
 const AppBar = () => {
-  const logoPath =
-    'https://i.pinimg.com/originals/c1/92/9d/c1929d3492c2f64ab65b43808c072043.jpg';
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
