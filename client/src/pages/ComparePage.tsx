@@ -17,24 +17,23 @@ const ComparePage = () => {
     const { userInfo } = useAuth();
 
 
-    const handleAddClick = (product: Product) => {
-        if (product.quantity < 1) {
-            toast.error('No items in stock');
-        };
+  const handleAddClick = async (product: Product) => {
+    if (product.quantity < 1){
+      toast.error('No items in stock');
+    };
 
-        if (userInfo) {
-            try {
-                cartsAPI.addToCart(product._id, '1');
-                toast.success('Added to cart!');
-            } catch (error) {
-                console.error('Failed to fetch', error);
-                toast.error('Failed to add to cart');
-            }
-        } else {
-            const productToAdd: CartItem = { product_id: product, quantity: 1 };
-            cartLocalStorageUtils.addToCart(productToAdd);
-            toast.success('Added to cart!');
-        };
+    if (userInfo) {
+      try {
+        await cartsAPI.addToCart(product._id, '1');
+        toast.success('Added to cart!');
+      } catch (error) {
+        console.error('Failed to fetch',error);
+        toast.error('Failed to add to cart');
+      }
+    } else {
+      const productToAdd:CartItem = {product_id: product,quantity: 1};
+      cartLocalStorageUtils.addToCart(productToAdd);
+      toast.success('Added to cart!');
     };
 
 
@@ -58,45 +57,44 @@ const ComparePage = () => {
         </Box>;
     }
 
-
-    return (
-        <>
-            <Paper style={{ margin: 50 }} elevation={12}>
-                <Table>
-                    <TableHead >
-                        <TableRow >
-                            <TableCell align='center'>
-                                Name
-                            </TableCell>
-                            {products.map((product, index) => <TableCell key={index} align='center'>{product!.name}</TableCell>)}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell></TableCell>
-                            {products.map((product, index) => <TableCell key={index} align='center'><img src={product.imgSource} alt={`${product.name} picture`} /></TableCell>)}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align='center'>Description</TableCell>
-                            {products.map((product, index) => <TableCell key={index} align='center'>{product!.description}</TableCell>)}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align='center'>Popularity</TableCell>
-                            {products.map((product, index) => <TableCell key={index} align='center'>{product!.clickCount}</TableCell>)}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align='center'>Price</TableCell>
-                            {products.map((product, index) => <TableCell key={index} align='center'>{product!.price}</TableCell>)}
-                        </TableRow>
-                        <TableRow>
-                            <TableCell></TableCell>
-                            {products.map((product, index) => <TableCell key={index} align='center'><Button variant='contained' onClick={() => handleAddClick(product)}>Add to cart</Button></TableCell>)}
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </Paper>
-        </>
-    )
+  return (
+    <>
+      <Paper style={{ margin: 50 }} elevation={12}>
+        <Table>
+          <TableHead >
+            <TableRow >
+              <TableCell align='center'>
+                Name
+              </TableCell>
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.name}</TableCell>)}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell></TableCell>
+              {products.map((product,index) => <TableCell key={index} align='center'><img src={product.imageUrl} alt={`${product.name} picture`} /></TableCell>)}
+            </TableRow>
+            <TableRow>
+              <TableCell align='center'>Description</TableCell>
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.description}</TableCell>)}
+            </TableRow>
+            <TableRow>
+              <TableCell align='center'>Popularity</TableCell>
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.clickCount}</TableCell>)}
+            </TableRow>
+            <TableRow>
+              <TableCell align='center'>Price</TableCell>
+              {products.map((product,index) => <TableCell key={index} align='center'>{product!.price}</TableCell>)}
+            </TableRow>
+            <TableRow>
+              <TableCell></TableCell>
+              {products.map((product,index) => <TableCell key={index} align='center'><Button variant='contained' onClick={() => handleAddClick(product)}>Add to cart</Button></TableCell>)}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Paper>
+    </>
+  )
 };
 
 

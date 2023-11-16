@@ -28,7 +28,7 @@ export default function ProductCard({ product, navigateToOnClick }: props) {
         <CardMedia
           component="img"
           height="140"
-          image={product.imgSource}
+          image={product.imageUrl}
           alt={product.name}
         />
         <CardContent>

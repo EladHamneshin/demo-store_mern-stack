@@ -84,7 +84,7 @@ const ProductPage = () => {
       <Paper style={{ margin: 50 }}>
         <Grid container spacing={3} alignItems='center' justifyContent='center'>
           <Grid item xs={6} justifyContent='center' alignItems='center'>
-            <img src={product?.imgSource} alt={product?.name} height={200} />
+            <img src={product?.imageUrl} alt={product?.name} height={200} />
           </Grid>
           <Grid item xs={6} >
             <Typography variant="h3">{product?.name}</Typography>

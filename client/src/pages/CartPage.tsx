@@ -14,7 +14,6 @@ const CartPage = () => {
     const { userInfo } = useAuth();
     const [totalAmount, setTotalAmount] = useState<number>(0);
 
-
     useEffect(() => {
         const fetchCart = async () => {
             try {
@@ -54,13 +53,11 @@ const CartPage = () => {
         try {
             if (userInfo) {
                 const updateCart = await cartsAPI.deleteProductFromCart(productId);
-
                 setCartItems(updateCart.items);
             } else {
                 const updateCart = cartLocalStorageUtils.removeFromCart(productId);
                 const newCart = cartLocalStorageUtils.getCart();
-
-                setCartItems(newCart)
+                setCartItems(newCart);
             }
             toast.success('Product removed from cart');
         } catch (error) {
@@ -73,8 +70,8 @@ const CartPage = () => {
         if (userInfo) {
             console.log('Product purchased!');
             alert(`Total Amount: ${totalAmount}`);
-            const newCart = await cartsAPI.deleteCart()
-            setCartItems(newCart.items)
+            const newCart = await cartsAPI.deleteCart();
+            setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
             setCartItems([])
@@ -92,6 +89,7 @@ const CartPage = () => {
 
     return (
         <Stack spacing={0} height={100}>
+
             <Typography variant="h2" component="h2">
                 Cart Page
             </Typography>

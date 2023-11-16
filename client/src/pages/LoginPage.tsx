@@ -21,7 +21,6 @@ const sendCartToServer = () => {
     }
 }
 
-
 const LoginPage = () => {
     const navigate = useNavigate();
     const { userInfo, login } = useAuth();
