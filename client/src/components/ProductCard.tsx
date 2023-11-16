@@ -23,11 +23,10 @@ export default function ProductCard({ product, navigateToOnClick }: props) {
     }
   };
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardActionArea onClick={handleCLick}>
+    <Card sx={{ maxWidth: 345, margin: '5px' , boxSizing:'border-box',boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)',marginBlock:'10px'}}>
+      <CardActionArea onClick={handleCLick} >
         <CardMedia
           component="img"
-          height="140"
           image={product.imageUrl}
           alt={product.name}
         />
