@@ -85,10 +85,10 @@ const AppBar = () => {
           </Typography>
         </Box>
         <Box sx={{ display:'flex', justifyContent:"space-between" }}>
-        <IconButton color="inherit" onClick={changeMode}>
+        <IconButton color="inherit" onClick={changeMode} sx={{marginRight:0.2}}>
           {mode === 'dark' ? <LightMode /> :  <DarkMode />}
         </IconButton>
-        <IconButton color="inherit" onClick={handleCart}>
+        <IconButton color="inherit" onClick={handleCart} sx={{marginRight:1.5}}>
           <StyledBadge badgeContent={0} color="warning">
             <ShoppingCartIcon />
           </StyledBadge>
