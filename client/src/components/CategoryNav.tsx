@@ -1,5 +1,4 @@
-import { Card, Typography } from '@mui/material';
-import Link from '@mui/material/Link';
+import { Paper, Typography, Link, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import categoriesAPI from '../api/categoriesAPI';
 import Category from '../types/Category';
@@ -13,6 +12,7 @@ const handleClick = async (category: Category) => {
 };
 
 export default function CategoryNav() {
+  const theme = useTheme();
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -23,13 +23,14 @@ export default function CategoryNav() {
   }, []);
 
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-      }}
-    >
+    <Paper elevation={3} sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: theme.palette.mode === 'dark' ? '#333' : theme.palette.background.default,
+    }}>
       {categories.map((category) => (
         <Link
           href={`/category/${category.name}`}
@@ -37,18 +38,21 @@ export default function CategoryNav() {
           key={category._id}
           onClick={() => handleClick(category)}
           sx={{
-            padding: 1,
             margin: 1,
-            borderRadius: 5,
-            backgroundColor: '#f0f0f0',
+            padding: 1,
+            borderRadius: theme.shape.borderRadius,
+            backgroundColor: theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper,
+            color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper),
+            transition: 'background-color 0.3s',
             '&:hover': {
-              backgroundColor: '#e0e0e0',
+              transform: 'scale(1.08)',
+              fontWeight: 'bold',
             },
           }}
         >
           <Typography variant="body1">{category.name}</Typography>
         </Link>
       ))}
-    </Card>
+    </Paper>
   );
 }
