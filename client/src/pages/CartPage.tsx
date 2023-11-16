@@ -69,12 +69,14 @@ const CartPage = () => {
     const buyNow = async () => {
         if (userInfo) {
             console.log('Product purchased!');
-            alert(`Total Amount: ${totalAmount}`);
+            alert(`Total Amount: ${totalAmount.toFixed(3)}`);
             const newCart = await cartsAPI.deleteCart();
             setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
             setCartItems([])
+            alert(`Total Amount: $ ${totalAmount.toFixed(3)}`);
+
         };
     }
     if (loading) {
@@ -88,6 +90,7 @@ const CartPage = () => {
     }
 
     return (
+        <>
         <Stack spacing={0} height={100}>
 
             <Typography variant="h2" component="h2">
@@ -104,9 +107,10 @@ const CartPage = () => {
                 />
             ))}
             <Button variant="contained" onClick={buyNow}>
-                Buy Now {totalAmount.toFixed(3)}
+                Buy Now  $ {totalAmount.toFixed(3)}
             </Button>
         </Stack>
+        </>
     );
 };
 

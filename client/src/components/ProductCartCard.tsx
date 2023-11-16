@@ -1,7 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Button, Typography, Card, CardContent, Paper, Grid, IconButton, Box } from '@mui/material';
-import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import  { Dispatch, SetStateAction, useState } from 'react';
+import { Button, Typography,  CardContent, Paper, Grid, } from '@mui/material';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import Product from '../types/Product';
@@ -61,6 +59,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
     };
 
     return (
+        <>
         <Paper style={{ boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)', margin: 'auto', marginBottom: '16px', width: '50%', boxSizing: 'border-box' }}>
             <Grid container spacing={3} alignItems="center" justifyContent="center">
                 <Grid item xs={6} justifyContent="center" alignItems="center">
@@ -90,6 +89,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
                 </Grid>
             </Grid>
         </Paper>
+        </>
     );
 };
 

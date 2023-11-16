@@ -1,4 +1,4 @@
-import { Card } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 import Link from '@mui/material/Link';
 import { useEffect, useState } from 'react';
 import categoriesAPI from '../api/categoriesAPI';
@@ -28,10 +28,6 @@ export default function CategoryNav() {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        typography: 'body1',
-        '& > :not(style) ~ :not(style)': {
-          ml: 2,
-        },
       }}
     >
       {categories.map((category) => (
@@ -40,8 +36,17 @@ export default function CategoryNav() {
           underline="none"
           key={category._id}
           onClick={() => handleClick(category)}
+          sx={{
+            padding: 1,
+            margin: 1,
+            borderRadius: 5,
+            backgroundColor: '#f0f0f0',
+            '&:hover': {
+              backgroundColor: '#e0e0e0',
+            },
+          }}
         >
-          {category.name}
+          <Typography variant="body1">{category.name}</Typography>
         </Link>
       ))}
     </Card>
