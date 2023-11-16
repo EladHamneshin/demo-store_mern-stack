@@ -84,7 +84,7 @@ const AppBar = () => {
             Demo Store
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ display:'flex', justifyContent:"space-between" }}>
         <IconButton color="inherit" onClick={changeMode}>
           {mode === 'dark' ? <LightMode /> :  <DarkMode />}
         </IconButton>
