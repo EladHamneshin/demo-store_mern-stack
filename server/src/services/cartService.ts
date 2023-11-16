@@ -12,7 +12,16 @@ const getCart = async (userId: Types.ObjectId) => {
 };
 
 const updateAmount = async (userId: Types.ObjectId, item: CartItem) => {
-  console.log(item,'service');
+  const cart = await cartDal.getCartProducts(userId);
+  if(!cart) throw new RequestError('No cart found', STATUS_CODES.NO_CONTENT);
+  
+  const prodInCart = cart.items.find(prod => prod.product_id.toString() === item.product_id.toString());
+  if(!prodInCart){
+    cart.items.push(item);
+    const newItemInCart = await cartDal.updateCart(userId, cart.items);
+    if (!newItemInCart) throw new RequestError('Cart update failed', STATUS_CODES.INTERNAL_SERVER_ERROR);
+    return newItemInCart
+  }
   
   const updatedCart = await cartDal.updateAmount(userId, item.product_id.toString(), item.quantity);
   if(!updatedCart)
