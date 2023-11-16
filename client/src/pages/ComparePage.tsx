@@ -76,7 +76,7 @@ const ComparePage = () => {
           <TableBody>
             <TableRow>
               <TableCell></TableCell>
-              {products.map((product,index) => <TableCell key={index} align='center'><img src={product.imgSource} alt={`${product.name} picture`} /></TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'><img src={product.imageUrl} alt={`${product.name} picture`} /></TableCell>)}
             </TableRow>
             <TableRow>
               <TableCell align='center'>Description</TableCell>

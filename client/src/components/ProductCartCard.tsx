@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { styled, Button, Typography, Card, CardContent } from '@mui/material';
+import { useState } from 'react';
+import { Button, Typography, CardContent } from '@mui/material';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import Product from '../types/Product';
@@ -77,7 +77,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
                 <Typography variant="body1">{product.category}</Typography>
                 <Typography variant="body1">{product.price}</Typography>
                 <Typography variant="body1">{product.name}</Typography>
-                <img src={product.imgSource} alt="" />
+                <img src={product.imageUrl} alt="" />
             </CardContent>
         </>);
     };
