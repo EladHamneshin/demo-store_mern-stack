@@ -46,7 +46,7 @@ const AppBar = () => {
   const { userInfo, logout } = useAuth();  
   const navigate = useNavigate();
   const context = useContext(UserContext)!;
-  const { mode, setMode } = context
+  const { mode,  changeMode } = context
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -82,7 +82,7 @@ const AppBar = () => {
         <Typography variant="h6" onClick={() => navigate('/')}component="div" sx={{ flexGrow: 1, cursor: 'pointer'}}>
           Demo store
         </Typography>
-        <IconButton color="inherit" onClick={() => setMode(prev=>prev=== 'dark'? 'light': 'dark')}>
+        <IconButton color="inherit" onClick={changeMode}>
           {mode === 'dark' ? <LightMode /> :  <DarkMode />}
         </IconButton>
         <IconButton color="inherit" onClick={handleCart}>

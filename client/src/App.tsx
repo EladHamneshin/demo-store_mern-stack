@@ -8,7 +8,8 @@ import CategoryNav from './components/CategoryNav'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useContext } from 'react'
-import {UserContext} from './UserContext'
+import { UserContext } from './UserContext'
+import { Box } from '@mui/material'
 
 function App() {
     const context = useContext(UserContext)!;
@@ -19,17 +20,19 @@ function App() {
         },
     });
 
-    return (
-        <>
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <AppBar/>
-            <CategoryNav/>
-            <ToastContainer />
-            <Outlet />
-            <Copyright sx={{ mt: 5 }} />
-        </ThemeProvider>
-        </>
+    return (     
+           <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <AppBar />
+                <CategoryNav />
+                <Box display="flex" flexDirection="column" minHeight="100vh">
+                    <Box flexGrow={1}>
+                        <Outlet />
+                    </Box>
+                    <Copyright sx={{ mt: 5 }} />
+                </Box>
+                <ToastContainer />
+            </ThemeProvider>
     )
 }
 
