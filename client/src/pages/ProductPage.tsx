@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography, Button, IconButton, Box, Paper } from "@mui/material";
+import { Grid, Typography, Button, IconButton, Box, Paper, CircularProgress } from "@mui/material";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import { useNavigate, useParams } from "react-router-dom";
@@ -73,8 +73,10 @@ const ProductPage = () => {
 
   //If the the product isn't loaded yet, show "Loading product..."
   if (!product) {
-    return <div>Loading product...</div>
-  };
+    return <Box sx={{ display: 'flex',alignItems:'center' ,justifyContent:'center'}}>
+        <CircularProgress />
+    </Box>;
+}
 
   //When the product is loaded then show the component
   return (

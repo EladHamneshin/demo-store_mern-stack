@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Button } from '@mui/material';
+import { Stack, Typography, Button, Box } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/useAuth';
+import CircularProgress from '@mui/material/CircularProgress';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 
@@ -48,11 +49,12 @@ const CartPage = () => {
         }
     }, [cartItems]);
 
+
     const removeFromCart = async (productId: string) => {
         try {
             if (userInfo) {
                 const updateCart = await cartsAPI.deleteProductFromCart(productId);
-                
+
                 setCartItems(updateCart.items);
             } else {
                 const updateCart = cartLocalStorageUtils.removeFromCart(productId);
@@ -78,32 +80,34 @@ const CartPage = () => {
             setCartItems([])
         };
     }
-        if (loading) {
-            return <div>Loading...</div>;
-        }
+    if (loading) {
+        return <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+        </Box>;
+    }
 
-        if (cartItems.length === 0) {
-            return <Typography variant="h2">No items in the cart</Typography>;
-        }
+    if (cartItems.length === 0) {
+        return <Typography variant="h2">No items in the cart</Typography>;
+    }
 
-        return (
-            <Stack spacing={0} height={100}>
-                <Typography variant="h2" component="h2">
-                    Cart Page
-                </Typography>
-                {cartItems.map((item, index) => (
-                    <ProductCartCard
-                        key={'ProductCartCard-' + index}
-                        product={item.product_id}
-                        quantity={item.quantity}
-                        removeFromCart={removeFromCart}
-                    />
-                ))}
-                <Button variant="contained" onClick={buyNow}>
-                    Buy Now {totalAmount}
-                </Button>
-            </Stack>
-        );
-    };
+    return (
+        <Stack spacing={0} height={100}>
+            <Typography variant="h2" component="h2">
+                Cart Page
+            </Typography>
+            {cartItems.map((item, index) => (
+                <ProductCartCard
+                    key={'ProductCartCard-' + index}
+                    product={item.product_id}
+                    quantity={item.quantity}
+                    removeFromCart={removeFromCart}
+                />
+            ))}
+            <Button variant="contained" onClick={buyNow}>
+                Buy Now {totalAmount.toFixed(3)}
+            </Button>
+        </Stack>
+    );
+};
 
-    export default CartPage;
+export default CartPage;
