@@ -42,7 +42,7 @@ export default function CategoryNav() {
             margin: 0.5,
             padding: 1,
             borderRadius: theme.shape.borderRadius,
-            backgroundColor: theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper,
+            //backgroundColor: theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper,
             color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper),
             '&:hover': {
               transform: 'scale(1.08)',
