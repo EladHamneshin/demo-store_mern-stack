@@ -77,11 +77,14 @@ const AppBar = () => {
 
   return (
     <MUIAppBar position="static">
-      <Toolbar>
-        <StorefrontIcon/>
-        <Typography variant="h6" onClick={() => navigate('/')}component="div" sx={{ flexGrow: 1, cursor: 'pointer'}}>
-          Demo store
-        </Typography>
+      <Toolbar sx={{ display:'flex', justifyContent:"space-between" }}>
+        <Box  onClick={() => navigate('/')}   sx={{display:'flex', justifyContent:"space-between", alignItems:"center", cursor:"pointer" }}>
+          <StorefrontIcon  sx={{ marginRight: 2 }} />
+          <Typography  variant="h6" component="div" sx={{marginRight: 2}}>
+            Demo Store
+          </Typography>
+        </Box>
+        <Box>
         <IconButton color="inherit" onClick={changeMode}>
           {mode === 'dark' ? <LightMode /> :  <DarkMode />}
         </IconButton>
@@ -135,6 +138,7 @@ const AppBar = () => {
             </Menu>
           </Box>
         )}
+        </Box>
       </Toolbar>
     </MUIAppBar>
   );

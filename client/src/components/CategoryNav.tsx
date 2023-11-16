@@ -38,7 +38,7 @@ export default function CategoryNav() {
           key={category._id}
           onClick={() => handleClick(category)}
           sx={{
-            margin: 1,
+            margin: 0.5,
             padding: 1,
             borderRadius: theme.shape.borderRadius,
             backgroundColor: theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper,
