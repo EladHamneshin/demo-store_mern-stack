@@ -43,7 +43,6 @@ export default function CategoryNav() {
             borderRadius: theme.shape.borderRadius,
             backgroundColor: theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper,
             color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper),
-            transition: 'background-color 0.3s',
             '&:hover': {
               transform: 'scale(1.08)',
               fontWeight: 'bold',
