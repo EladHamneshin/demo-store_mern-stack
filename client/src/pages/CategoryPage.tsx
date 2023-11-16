@@ -4,6 +4,7 @@ import Product from '../types/Product';
 import categoriesAPI from '../api/categoriesAPI';
 import ProductCard from '../components/ProductCard';
 import ProductCardsContainer from '../components/ProductCardsContainer';
+import { Box, CircularProgress } from '@mui/material';
 
 const CategoryPage = () => {
   const { cname } = useParams();
@@ -19,6 +20,11 @@ const CategoryPage = () => {
       .catch((err) => { console.log(err); })
   }, []);
 
+  if (products.length === 0) {
+    return <Box sx={{ display: 'flex',alignItems:'center' ,justifyContent:'center'}}>
+        <CircularProgress />
+    </Box>;
+}
   return (
     <>
       {isCompareMode.current && <h1>please choose product to compare </h1>}

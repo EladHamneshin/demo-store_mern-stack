@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Button, Card, CardContent } from '@mui/material';
+import { Stack, Typography, Button, Box } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/useAuth';
+import CircularProgress from '@mui/material/CircularProgress';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 
@@ -47,6 +48,7 @@ const CartPage = () => {
         }
     }, [cartItems]);
 
+
     const removeFromCart = async (productId: string) => {
         try {
             if (userInfo) {
@@ -72,12 +74,13 @@ const CartPage = () => {
             setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
-            setCartItems([]);
-        }
-    };
-
+            setCartItems([])
+        };
+    }
     if (loading) {
-        return <div>Loading...</div>;
+        return <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+        </Box>;
     }
 
     if (cartItems.length === 0) {
@@ -85,7 +88,8 @@ const CartPage = () => {
     }
 
     return (
-        <Stack spacing={2}>
+        <Stack spacing={0} height={100}>
+
             <Typography variant="h2" component="h2">
                 Cart Page
             </Typography>
@@ -98,7 +102,7 @@ const CartPage = () => {
                 />
             ))}
             <Button variant="contained" onClick={buyNow}>
-                Buy Now {totalAmount}
+                Buy Now {totalAmount.toFixed(3)}
             </Button>
         </Stack>
     );

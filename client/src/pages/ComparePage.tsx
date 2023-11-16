@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import productsAPI from '../api/productsAPI';
-import { Button, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import Product from '../types/Product';
 import { useAuth } from '../hooks/useAuth';
@@ -12,9 +12,9 @@ import CartItem from '../types/CartItem';
 
 
 const ComparePage = () => {
-  const { pid1, pid2 } = useParams();
-  const [products, setProducts] = useState<Product[] | null>(null);
-  const { userInfo } = useAuth();
+    const { pid1, pid2 } = useParams();
+    const [products, setProducts] = useState<Product[] | null>(null);
+    const { userInfo } = useAuth();
 
 
   const handleAddClick = async (product: Product) => {
@@ -35,31 +35,27 @@ const ComparePage = () => {
       cartLocalStorageUtils.addToCart(productToAdd);
       toast.success('Added to cart!');
     };
-  };
 
 
-  const fetchProductsData = async (pid1: string, pid2: string) => {
-    try {
-      const product1 = await productsAPI.getProduct(pid1);
-      const product2 = await productsAPI.getProduct(pid2);
-      setProducts([product1, product2]);
-    } catch (error) {
-      console.error('Failed to fetch');
+    const fetchProductsData = async (pid1: string, pid2: string) => {
+        try {
+            const product1 = await productsAPI.getProduct(pid1);
+            const product2 = await productsAPI.getProduct(pid2);
+            setProducts([product1, product2]);
+        } catch (error) {
+            console.error('Failed to fetch');
+        };
     };
-  };
-  
-  useEffect(() => {
-    fetchProductsData(pid1!, pid2!);
-  }, []);
 
-  if (!products) {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    );
-  };
+    useEffect(() => {
+        fetchProductsData(pid1!, pid2!);
+    }, []);
 
+    if (!products) {
+        return <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress />
+        </Box>;
+    }
 
   return (
     <>
