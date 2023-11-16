@@ -17,14 +17,14 @@ const ComparePage = () => {
   const { userInfo } = useAuth();
 
 
-  const handleAddClick = (product: Product) => {
+  const handleAddClick = async (product: Product) => {
     if (product.quantity < 1){
       toast.error('No items in stock');
     };
 
     if (userInfo) {
       try {
-        cartsAPI.addToCart(product._id, '1');
+        await cartsAPI.addToCart(product._id, '1');
         toast.success('Added to cart!');
       } catch (error) {
         console.error('Failed to fetch',error);
@@ -76,7 +76,7 @@ const ComparePage = () => {
           <TableBody>
             <TableRow>
               <TableCell></TableCell>
-              {products.map((product,index) => <TableCell key={index} align='center'><img src={product.imgSource} alt={`${product.name} picture`} /></TableCell>)}
+              {products.map((product,index) => <TableCell key={index} align='center'><img src={product.imageUrl} alt={`${product.name} picture`} /></TableCell>)}
             </TableRow>
             <TableRow>
               <TableCell align='center'>Description</TableCell>

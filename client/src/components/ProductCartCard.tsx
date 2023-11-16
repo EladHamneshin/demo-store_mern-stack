@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Typography, Card, CardContent, CardActions, CardMedia, Grid } from '@mui/material';
+
+import { useState } from 'react';
+import { Button, Typography, CardContent } from '@mui/material';
 import cartsAPI from '../api/cartsAPI';
 import { toast } from 'react-toastify';
 import Product from '../types/Product';
