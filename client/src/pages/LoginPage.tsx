@@ -10,15 +10,19 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import * as localStorage from '../utils/cartLocalStorageUtils'
 import usersAPI from '../api/usersAPI'
 
-const sendCartToServer = () => {
-  if(localStorage.isCartEmpty()) return;
-  try {
-    const cart = localStorage.getCart();
-    cart.map((item) => { cartsAPI.addToCart(item.product_id._id, item.quantity.toString());})
-  } catch (err) {
-    console.log(err);
-  }
-}
+// const sendCartToServer = async () => {
+//     if (localStorage.isCartEmpty()) return;
+//     try {
+//       const cart = localStorage.getCart();
+  
+//       await Promise.all(cart.map(async (item) => {
+//         await cartsAPI.addToCart(item.product_id._id.toString(), item.quantity.toString());
+//       }));
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+  
 
 
 const LoginPage = () => {
@@ -43,7 +47,7 @@ const LoginPage = () => {
       const loggedUser: UserInfo = await usersAPI.loginUser(email.toString(), password.toString());
       setIsLoading(false);
       login(loggedUser);
-      sendCartToServer();
+    //   sendCartToServer();
       toast.success('Login successful');
       navigate(ROUTES.HOME);
     } catch (err) {
