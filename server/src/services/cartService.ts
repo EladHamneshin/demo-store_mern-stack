@@ -11,6 +11,25 @@ const getCart = async (userId: Types.ObjectId) => {
   return cart;
 };
 
+const updateAmount = async (userId: Types.ObjectId, item: CartItem) => {
+  const cart = await cartDal.getCartProducts(userId);
+  if(!cart) throw new RequestError('No cart found', STATUS_CODES.NO_CONTENT);
+  
+  const prodInCart = cart.items.find(prod => prod.product_id.toString() === item.product_id.toString());
+  if(!prodInCart){
+    cart.items.push(item);
+    const newItemInCart = await cartDal.updateCart(userId, cart.items);
+    if (!newItemInCart) throw new RequestError('Cart update failed', STATUS_CODES.INTERNAL_SERVER_ERROR);
+    return newItemInCart
+  }
+  
+  const updatedCart = await cartDal.updateAmount(userId, item.product_id.toString(), item.quantity);
+  if(!updatedCart)
+    throw new RequestError('Cart not found', STATUS_CODES.NO_CONTENT);
+
+  return updatedCart;
+};
+
 const updateCart = async (userId: Types.ObjectId, item: CartItem) => {
   const dbCart: Cart | null = await cartDal.getCartProducts(userId);
   if (!dbCart)
@@ -52,4 +71,4 @@ const patchAmount = async (
   return await cartDal.decAmount(userId, metaDate.pid);
 };
 
-export default { getCart, updateCart, deleteCart, deleteCartItem, patchAmount };
+export default { getCart,updateAmount, updateCart, deleteCart, deleteCartItem, patchAmount };

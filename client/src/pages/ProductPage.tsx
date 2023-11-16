@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography, Card, CardContent, Button, IconButton, Box } from "@mui/material";
+import { Grid, Typography, Button, IconButton, Box, Paper, CircularProgress } from "@mui/material";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,85 +27,89 @@ const ProductPage = () => {
       const product = await productsAPI.getProduct(pid!);
       setProduct(product);
     } catch (error) {
-      console.error('Failed to fetch')
-    }
-  }
+      console.error('Failed to fetch');
+    };
+  };
 
   //get the product after the page is rendered
   useEffect(() => {
-    getProduct(pid!)
+    getProduct(pid!);
   }, []);
 
   //handle decrease quantity by clicking on the minus button (when quantity shouldnt be lower then 1)
   const decrementQuantity = () => {
     if (quantity > 1) {
       setQuantity(prevQty => prevQty - 1);
-    }
+    };
   };
 
   //handle add to cart. (if user logged in, products is being added to db at the server, else its stored in localstorage)
   const handleAddToCart = async () => {
+    if (quantity > product!.quantity) {
+      toast.error(`Only ${product!.quantity} in stock`);
+      return;
+    };
     if (userInfo) {
       try {
         await cartsAPI.addToCart(product!._id, quantity.toString());
-        toast.success('Added to cart!')
+        toast.success('Added to cart!');
         setQuantity(1);
       } catch (error) {
         console.error('failed to add to cart');
-        toast.error('Failed to add')
+        toast.error('Failed to add');
       };
     } else {
-      const itemForCart: CartItem = {product_id: product!, quantity: quantity};
+      const itemForCart: CartItem = { product_id: product!, quantity: quantity };
       localstorage.addToCart(itemForCart);
-      setQuantity(1)
-    }
+      toast.success('Added to cart!');
+      setQuantity(1);
+    };
   };
 
   //Navigate the user to choose another product to compare them
   const handleCompareProducts = () => {
-    navigate(`/category/${product!.category}`, { state: product })
+    navigate(`/category/${product!.category}`, { state: product });
   };
 
+  //If the the product isn't loaded yet, show "Loading product..."
   if (!product) {
-    return <div>Loading product...</div>
-  };
+    return <Box sx={{ display: 'flex',alignItems:'center' ,justifyContent:'center'}}>
+        <CircularProgress />
+    </Box>;
+}
 
+  //When the product is loaded then show the component
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6}>
-        <Card>
-          <CardContent >
-            <img src={product?.imgSource} alt={product?.name} height={200} />
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={6} >
-        <Card>
-          <CardContent>
-            <Typography variant="h3">{product?.name}</Typography>
-            <Typography variant="body1">{product?.description}</Typography>
-            <Typography variant="h6">${product?.price}</Typography>
+    <>
+      <Paper style={{ margin: 50 }}>
+        <Grid container spacing={3} alignItems='center' justifyContent='center'>
+          <Grid item xs={6} justifyContent='center' alignItems='center'>
+            <img src={product.imageUrl} alt={product.name} height={200} />
+          </Grid>
+          <Grid item xs={6} >
+            <Typography variant="h3">{product.name}</Typography>
+            <Typography variant="body1">{product.description}</Typography>
+            <Typography variant="h6">${product.price}</Typography>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton><RemoveCircleRoundedIcon onClick={decrementQuantity}></RemoveCircleRoundedIcon></IconButton>
+              <IconButton onClick={decrementQuantity}><RemoveCircleRoundedIcon ></RemoveCircleRoundedIcon></IconButton>
               <Box>{quantity}</Box>
-              <IconButton><AddCircleRoundedIcon onClick={() => setQuantity(quantity + 1)}></AddCircleRoundedIcon></IconButton>
+              <IconButton onClick={() => setQuantity(quantity + 1)}><AddCircleRoundedIcon ></AddCircleRoundedIcon></IconButton>
             </div>
             <div style={{ margin: "5px", alignItems: 'space-around' }}>
-              <Button variant="contained" color="primary" onClick={handleAddToCart}>
+              <Button style={{ margin: 5 }} variant="contained" color="primary" onClick={handleAddToCart}>
                 Add to Cart
               </Button>
-              <Button variant="contained" color="primary" onClick={handleCompareProducts}>
+              <Button style={{ margin: 5 }} variant="contained" color="primary" onClick={handleCompareProducts}>
                 Compare similar products
               </Button>
             </div>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={12}>
+          </Grid>
+        </Grid>
+      </Paper>
+      <Paper style={{margin: '10px 50px'}}>
         <StoreMap />
-      </Grid>
-    </Grid>
+      </Paper>
+    </>
   );
 };
-
 export default ProductPage;
