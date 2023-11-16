@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Button, Typography, Card, CardContent, Paper, Grid, IconButton, Box } from '@mui/material';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
@@ -12,9 +12,11 @@ type Props = {
     product: Product;
     quantity: number;
     removeFromCart: (productId: string) => Promise<void>;
+    totalAmount: number
+    setTotalAmount: Dispatch<SetStateAction<number>>
 };
 
-const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
+const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setTotalAmount}: Props) => {
     const [cartQuantity, setCartQuantity] = useState<number>(quantity);
     const { userInfo } = useAuth();
 
@@ -27,6 +29,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
                     cartLocalStorageUtils.incQuantityOfProduct(productId);
                 }
                 setCartQuantity(cartQuantity + 1);
+                setTotalAmount(totalAmount + product.price)
             } catch (error) {
                 console.error('Error increasing quantity:', error);
             }
@@ -44,6 +47,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
                     cartLocalStorageUtils.decQuantityOfProduct(productId);
                 }
                 setCartQuantity(cartQuantity - 1);
+                setTotalAmount(totalAmount - product.price);
             } catch (error) {
                 console.error('Error decreasing quantity:', error);
             }
@@ -57,28 +61,28 @@ const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
     };
 
     return (
-        <Paper style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', margin: 'auto', marginBottom: '16px', width: '50%', boxSizing: 'border-box' }}>
+        <Paper style={{ boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)', margin: 'auto', marginBottom: '16px', width: '50%', boxSizing: 'border-box' }}>
             <Grid container spacing={3} alignItems="center" justifyContent="center">
                 <Grid item xs={6} justifyContent="center" alignItems="center">
-                    <img src={product?.imgSource} alt={product?.name} height={200} />
+                    <img src={product.imageUrl} alt={product.name} height={200} />
                 </Grid>
                 <Grid item xs={6}>
                     <CardContent>
                         <Typography variant="h3">{product?.name}</Typography>
                         <Typography variant="body1">{product?.category}</Typography>
                         <Typography variant="body1">${product?.price}</Typography>
-                        <div style={{ display: 'flex', alignItems: 'center' ,justifyContent:'space-around'}}>
-                            
-                        <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
-                            -
-                        </Button>
-                        <Typography variant="body1">{cartQuantity}</Typography>
-                        <Button variant="outlined" onClick={() => increaseQuantity(product._id)}>
-                            +
-                        </Button>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+
+                            <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
+                                -
+                            </Button>
+                            <Typography variant="body1">{cartQuantity}</Typography>
+                            <Button variant="outlined" onClick={() => increaseQuantity(product._id)}>
+                                +
+                            </Button>
                         </div>
                     </CardContent>
-                    <div style={{display:'flex', margin: '5px', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', margin: '5px', justifyContent: 'center' }}>
                         <Button variant="outlined" onClick={() => deleteFromCart(product._id)}>
                             Delete from Cart
                         </Button>

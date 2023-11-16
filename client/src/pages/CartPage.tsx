@@ -99,6 +99,8 @@ const CartPage = () => {
                     product={item.product_id}
                     quantity={item.quantity}
                     removeFromCart={removeFromCart}
+                    totalAmount={totalAmount}
+                    setTotalAmount={setTotalAmount}
                 />
             ))}
             <Button variant="contained" onClick={buyNow}>

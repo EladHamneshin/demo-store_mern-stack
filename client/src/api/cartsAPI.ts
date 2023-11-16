@@ -8,8 +8,6 @@ async function getCart(): Promise<Cart> {
 }
 
 async function addToCart(pid: string, quantity: string): Promise<Cart> {
-    console.log(pid);
-    console.log(quantity);
 
     const response = await fetch(`/api/users/cart`, {
         method: "POST",
@@ -20,14 +18,12 @@ async function addToCart(pid: string, quantity: string): Promise<Cart> {
             product_id: pid,
             quantity: quantity
         }),
-    });
-    const cart = await response.json()
-    console.log(cart,"ppp");
-    
+    });    
     return await handleApiRes(response);
 }
 
 async function updateQuantity(pid: string, action : "inc" | "dec"):Promise<Cart> {
+    
     const response = await fetch(`/api/users/cart`, {
         method: "PATCH",
         headers: {
