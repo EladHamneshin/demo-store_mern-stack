@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import {
+  DarkMode,
+  LightMode,
+} from "@mui/icons-material";
 import {
   AppBar as MUIAppBar,
   Toolbar,
@@ -24,6 +28,7 @@ import { useAuth } from '../hooks/useAuth';
 import usersAPI from '../api/usersAPI.ts';
 import ROUTES from '../routes/routesModel.ts';
 import { toast } from 'react-toastify';
+import { UserContext } from '../UserContext.tsx';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -42,6 +47,8 @@ const AppBar = () => {
   );
   const { userInfo, logout } = useAuth();  
   const navigate = useNavigate();
+  const context = useContext(UserContext)!;
+  const { mode, setMode } = context
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -77,6 +84,9 @@ const AppBar = () => {
         <Typography variant="h6" onClick={() => navigate('/')}component="div" sx={{ flexGrow: 1, cursor: 'pointer'}}>
           Demo store
         </Typography>
+        <IconButton color="inherit" onClick={() => setMode(prev=>prev=== 'dark'? 'light': 'dark')}>
+          {mode === 'dark' ? <LightMode /> :  <DarkMode />}
+        </IconButton>
         <IconButton color="inherit" onClick={handleCart}>
           <StyledBadge badgeContent={0} color="warning">
             <ShoppingCartIcon />
