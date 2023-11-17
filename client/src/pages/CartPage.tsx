@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { Stack, Typography, Button, Box } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
-import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/useAuth';
 import CircularProgress from '@mui/material/CircularProgress';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
+import { toastError, toastSuccess } from '../utils/toastUtils';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -59,10 +59,10 @@ const CartPage = () => {
                 const newCart = cartLocalStorageUtils.getCart();
                 setCartItems(newCart);
             }
-            toast.success('Product removed from cart');
+            toastSuccess('Product removed from cart');
         } catch (error) {
             console.error('Error removing from cart:', error);
-            toast.error('Error removing product from cart');
+            toastError('Error removing product from cart');
         }
     };
 

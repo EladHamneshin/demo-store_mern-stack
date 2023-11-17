@@ -7,7 +7,7 @@ interface Product {
   price: number;
   description: string;
   category: CategoryName;
-  imgSource: string;
+  imageUrl: string;
   name: string;
   clickCount: number;
   tags: Phone | Computer | Ring | Book | Bag | Watch | Guitar;

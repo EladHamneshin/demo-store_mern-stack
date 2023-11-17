@@ -10,7 +10,7 @@ import { useAuth } from "../hooks/useAuth.ts";
 import cartsAPI from "../api/cartsAPI.ts";
 import * as localstorage from "../utils/cartLocalStorageUtils.ts";
 import CartItem from "../types/CartItem.ts";
-import { toast } from 'react-toastify';
+import { toastError, toastSuccess } from "../utils/toastUtils.ts";
 
 
 
@@ -46,22 +46,22 @@ const ProductPage = () => {
     //handle add to cart. (if user logged in, products is being added to db at the server, else its stored in localstorage)
     const handleAddToCart = async () => {
         if (quantity > product!.quantity) {
-            toast.error(`Only ${product!.quantity} in stock`);
+            toastError(`Only ${product!.quantity} in stock`);
             return;
         };
         if (userInfo) {
             try {
                 await cartsAPI.addToCart(product!._id, quantity.toString());
-                toast.success('Added to cart!');
+                toastSuccess('Added to cart!');
                 setQuantity(1);
             } catch (error) {
                 console.error('failed to add to cart');
-                toast.error('Failed to add');
+                toastError('Failed to add');
             };
         } else {
             const itemForCart: CartItem = { product_id: product!, quantity: quantity };
             localstorage.addToCart(itemForCart);
-            toast.success('Added to cart!');
+            toastSuccess('Added to cart!');
             setQuantity(1);
         };
     };

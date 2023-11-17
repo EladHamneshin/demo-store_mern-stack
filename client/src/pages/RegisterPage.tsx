@@ -4,8 +4,8 @@ import ROUTES from '../routes/routesModel';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isValidEmail, isValidPassword } from '../utils/validationUtils';
-import { toast } from 'react-toastify';
 import userAPI from '../api/usersAPI';
+import { toastError, toastSuccess } from '../utils/toastUtils';
 
 
 const RegisterPage = () => {
@@ -49,17 +49,17 @@ const RegisterPage = () => {
     const confirmPassword = data.get('confirmPassword') || '';
 
     if(password !== confirmPassword){
-      toast.error("Passwords do not match");
+      toastError("Passwords do not match");
       return
     }
     
     if(!isValidEmail(email.toString())){
-      toast.error("Email must be a valid email");
+      toastError("Email must be a valid email");
       return
     }
       
     if(!isValidPassword(password.toString())){
-      toast.error("Password must be a valid password")
+      toastError("Password must be a valid password")
       return
     }
 
@@ -67,11 +67,11 @@ const RegisterPage = () => {
       setIsLoading(true);
       await userAPI.register(email.toString(), password.toString() );
       setIsLoading(false);
-      toast.success("Register success");
+      toastSuccess("Register success");
       navigate(ROUTES.HOME);
     } catch (err) {
       setIsLoading(false);
-      toast.error((err as Error).message);
+      toastError((err as Error).message);
     }
   };
 

@@ -9,7 +9,8 @@ const categorySchema = new mongoose.Schema<Category>(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
       }],
-    clickCount: Number
+    clickCount: Number,
+    imageUrl: String
   },
   {
     timestamps: true,

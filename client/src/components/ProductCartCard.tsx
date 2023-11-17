@@ -1,10 +1,10 @@
 import  { Dispatch, SetStateAction, useState } from 'react';
 import { Button, Typography,  CardContent, Paper, Grid, } from '@mui/material';
 import cartsAPI from '../api/cartsAPI';
-import { toast } from 'react-toastify';
 import Product from '../types/Product';
 import { useAuth } from '../hooks/useAuth';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
+import { toastError } from '../utils/toastUtils';
 
 type Props = {
     product: Product;
@@ -32,7 +32,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
                 console.error('Error increasing quantity:', error);
             }
         } else {
-            toast.error(`There are only ${product.quantity} items available for purchase`);
+            toastError(`There are only ${product.quantity} items available for purchase`);
         }
     };
 
@@ -50,7 +50,7 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
                 console.error('Error decreasing quantity:', error);
             }
         } else {
-            toast.error('Quantity cannot be less than 1');
+            toastError('Quantity cannot be less than 1');
         }
     };
 

@@ -27,8 +27,8 @@ import Logout from '@mui/icons-material/Logout';
 import { useAuth } from '../hooks/useAuth';
 import usersAPI from '../api/usersAPI.ts';
 import ROUTES from '../routes/routesModel.ts';
-import { toast } from 'react-toastify';
 import { UserContext } from '../UserContext.tsx';
+import { toastError, toastSuccess } from '../utils/toastUtils.ts';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -65,9 +65,9 @@ const AppBar = () => {
     try {
       await usersAPI.logoutUser();
       logout();
-      toast.success('User logged out successfully');
+      toastSuccess('User logged out successfully');
     } catch (err) {
-      toast.error((err as Error).message);
+      toastError((err as Error).message);
     }
   };
 

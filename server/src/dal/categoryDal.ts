@@ -2,7 +2,7 @@ import CategoryModel from "../models/categoryModel.js";
 import productModel from "../models/productModel.js";
 
 const getCategories = async () => {
-    const categories = await CategoryModel.find({}).select('name');
+    const categories = await CategoryModel.find({});
     return categories;
 };
 
@@ -16,7 +16,6 @@ const getTop5Categories = async () => {
     const topCategories = await CategoryModel.find({})
         .sort({ clickCount: -1 })
         .limit(5)
-        .select('name')
         .exec();
     return topCategories;
 };

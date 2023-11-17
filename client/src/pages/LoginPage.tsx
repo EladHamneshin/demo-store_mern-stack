@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import cartsAPI from '../api/cartsAPI'
 import ROUTES from '../routes/routesModel'
-import { toast } from 'react-toastify'
 import UserInfo from '../types/UserInfo'
 import { Link, Container, CssBaseline, Box, Avatar, Typography, TextField, Button, Grid } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import * as localStorage from '../utils/cartLocalStorageUtils'
 import usersAPI from '../api/usersAPI'
+import { toastError, toastSuccess } from '../utils/toastUtils'
 
 const sendCartToServer = () => {
     if (localStorage.isCartEmpty()) return;
@@ -44,11 +44,11 @@ const LoginPage = () => {
             setIsLoading(false);
             login(loggedUser);
             sendCartToServer();
-            toast.success('Login successful');
+            toastSuccess('Login successful');
             navigate(ROUTES.HOME);
         } catch (err) {
             setIsLoading(false);
-            toast.error((err as Error).message);
+            toastError((err as Error).message);
         }
     };
 

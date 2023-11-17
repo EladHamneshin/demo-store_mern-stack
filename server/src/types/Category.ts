@@ -4,7 +4,8 @@ import Product from "./Product.js"
 type Category = {
     name: CategoryName,
     products: Product[],
-    clickCount: number
+    clickCount: number,
+    imageUrl: string
 }
 
 export default Category

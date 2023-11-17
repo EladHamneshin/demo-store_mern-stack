@@ -5,29 +5,29 @@ import { useParams } from 'react-router-dom';
 import Product from '../types/Product';
 import { useAuth } from '../hooks/useAuth';
 import cartsAPI from '../api/cartsAPI';
-import { toast } from 'react-toastify';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
+import { toastError, toastSuccess } from '../utils/toastUtils';
 const ComparePage = () => {
     const { pid1, pid2 } = useParams();
     const [products, setProducts] = useState<Product[] | null>(null);
     const { userInfo } = useAuth();
     const handleAddClick = async (product: Product) => {
         if (product.quantity < 1) {
-            toast.error('No items in stock');
+            toastError('No items in stock');
         };
         if (userInfo) {
             try {
                 await cartsAPI.addToCart(product._id, '1');
-                toast.success('Added to cart!');
+                toastSuccess('Added to cart!');
             } catch (error) {
                 console.error('Failed to fetch', error);
-                toast.error('Failed to add to cart');
+                toastError('Failed to add to cart');
             }
         } else {
             const productToAdd: CartItem = { product_id: product, quantity: 1 };
             cartLocalStorageUtils.addToCart(productToAdd);
-            toast.success('Added to cart!');
+            toastSuccess('Added to cart!');
         };
     };
     const fetchProductsData = async (pid1: string, pid2: string) => {

@@ -23,7 +23,7 @@ export default function CategoryNav() {
   }, []);
 
   return (
-    <Paper elevation={3} sx={{
+    <Paper elevation={2} sx={{
       display: 'flex',
       justifyContent: 'center',
       position: 'sticky',
