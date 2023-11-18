@@ -5,12 +5,12 @@ import categoriesAPI from '../api/categoriesAPI';
 import CategoryCard from './CategoryCard';
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
-  padding: theme.spacing(1),
   textAlign: 'center',
+  margin: 5,
   color: theme.palette.text.secondary,
 }));
+
 export default function Top5Categories() {
   const [top5Categories, setTop5Categories] = useState<Category[] >([]);
 
