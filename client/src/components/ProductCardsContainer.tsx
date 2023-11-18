@@ -4,8 +4,8 @@ import { styled } from "@mui/system";
 const ProductCardsContainer = styled(Box)({
   display: "flex",
   flexWrap: "wrap",
-  gap: '3px',
-
+  gap: '4px',
+  justifyContent: "center",
 });
 
 export default ProductCardsContainer;

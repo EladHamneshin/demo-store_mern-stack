@@ -59,7 +59,7 @@ const Filter = (props: Props) => {
     const filterProducts = () => {
       const newProducts = products.filter((p) => {
         for (const tag of tags) {
-          const isChecked = filters[tag].every((filter) => {
+          const isChecked = filters[tag].some((filter) => {
             return p.tags[tag] === filter;
           });
           if (!(filters[tag].length === 0 || isChecked)) return false;

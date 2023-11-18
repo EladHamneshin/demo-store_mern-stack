@@ -28,7 +28,7 @@ export default function Top5Categories() {
 
   return (
     <>
-      <Typography variant="h4">Top 5 Categories</Typography>
+      <Typography display={'flex'} justifyContent={'center'} variant="h4">Top 5 Categories</Typography>
       {top5Categories && (
         <Grid
           container

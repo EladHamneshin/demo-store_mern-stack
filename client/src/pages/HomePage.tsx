@@ -1,8 +1,7 @@
 import Top5Products from '../components/Top5Products'
 import Top5Categories from '../components/Top5Categories'
-type Props = {}
 
-const HomePage = (props: Props) => {
+const HomePage = () => {
   return (
     <>
     <Top5Categories/>

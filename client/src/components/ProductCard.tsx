@@ -24,7 +24,7 @@ export default function ProductCard({ product, navigateToOnClick }: props) {
   };
   return (
     <Card onClick={handleCLick} sx={{ 
-      maxWidth: 200, // adjust this value to change the size of the card
+      maxWidth: 300, // adjust this value to change the size of the card
       margin: '5px', 
       boxSizing:'border-box',
       boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)',
