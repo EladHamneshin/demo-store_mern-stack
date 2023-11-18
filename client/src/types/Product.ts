@@ -10,6 +10,6 @@ interface Product {
   imageUrl: string;
   name: string;
   clickCount: number;
-  tags: Phone | Computer | Ring | Book | Bag | Watch | Guitar;
+  tags:  {[key: string]: string}
 }
 export default Product;
