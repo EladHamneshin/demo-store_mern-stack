@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Button, Box } from '@mui/material';
+import { Typography, Button, Box, Grid, Paper, List, ListItem, ListItemText } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import { useAuth } from '../hooks/useAuth';
@@ -48,7 +48,6 @@ const CartPage = () => {
         }
     }, [cartItems]);
 
-
     const removeFromCart = async (productId: string) => {
         try {
             if (userInfo) {
@@ -74,15 +73,30 @@ const CartPage = () => {
             setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
-            setCartItems([])
+            setCartItems([]);
             alert(`Total Amount: $ ${totalAmount.toFixed(3)}`);
+        }
+    };
 
-        };
-    }
+    const updateCartItemQuantity = (productId: string, newQuantity: number) => {
+        setCartItems((prevCartItems) =>
+            prevCartItems.map((item) =>
+                item.product_id._id === productId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+
+        const total = cartItems.reduce((sum, item) => {
+            return sum + item.quantity * item.product_id.price;
+        }, 0);
+        setTotalAmount(total);
+    };
+
     if (loading) {
-        return <Box sx={{ display: 'flex' }}>
-            <CircularProgress />
-        </Box>;
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
     }
 
     if (cartItems.length === 0) {
@@ -90,27 +104,53 @@ const CartPage = () => {
     }
 
     return (
-        <>
-        <Stack spacing={0} height={100}>
-
-            <Typography variant="h2" component="h2">
-                Cart Page
-            </Typography>
-            {cartItems.map((item, index) => (
-                <ProductCartCard
-                    key={'ProductCartCard-' + index}
-                    product={item.product_id}
-                    quantity={item.quantity}
-                    removeFromCart={removeFromCart}
-                    totalAmount={totalAmount}
-                    setTotalAmount={setTotalAmount}
-                />
-            ))}
-            <Button variant="contained" onClick={buyNow}>
-                Buy Now  $ {totalAmount.toFixed(3)}
-            </Button>
-        </Stack>
-        </>
+        <Grid container spacing={3} style={{ display: 'flex', alignItems: 'center' }}>
+    <Grid item xs={8}>
+        <Typography variant="h2" component="h2">
+            Cart Page
+        </Typography>
+        {cartItems.map((item, index) => (
+            <ProductCartCard
+                key={'ProductCartCard-' + index}
+                product={item.product_id}
+                quantity={item.quantity}
+                removeFromCart={removeFromCart}
+                totalAmount={totalAmount}
+                setTotalAmount={setTotalAmount}
+                updateCartItemQuantity={updateCartItemQuantity}
+            />
+        ))}
+    </Grid>
+    <Grid item xs={4}>
+        <Paper sx={{ padding: '16px', overflow: 'auto', maxHeight: '70vh', minHeight: '70vh', position: 'fixed', top: '65%', right: '0', transform: 'translateY(-50%)' }}>
+            <List>
+                <ListItem>
+                    <ListItemText primary={`Number of Items: ${cartItems.length}`} />
+                </ListItem>
+                {cartItems.map((item, index) => (
+                    <ListItem key={`ListItem-${index}`}>
+                        <ListItemText
+                            primary={item.product_id.name}
+                            secondary={`Quantity: ${item.quantity} | Total Price: $${(item.quantity * item.product_id.price).toFixed(3)}`}
+                        />
+                        <img src={item.product_id.imageUrl} alt={item.product_id.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '1rem' }} />
+                    </ListItem>
+                ))}
+                <ListItem>
+                    <ListItemText primary="Total Amount" />
+                    <Typography variant="h5" sx={{ marginLeft: '1rem' }}>
+                        ${totalAmount.toFixed(3)}
+                    </Typography>
+                </ListItem>
+                <ListItem>
+                    <Button variant="contained" onClick={buyNow}>
+                        Buy Now
+                    </Button>
+                </ListItem>
+            </List>
+        </Paper>
+    </Grid>
+</Grid>
     );
 };
 

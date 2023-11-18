@@ -22,7 +22,6 @@ function Top5ProductsPage() {
     return (
         <div>
             <h1>Top 5 Products</h1>
-            (
             <ul
                 style={{
                     listStyleType: 'none',
@@ -36,7 +35,6 @@ function Top5ProductsPage() {
                     <ProductCard key={product._id} product={product} />
                 ))}
             </ul>
-            )
         </div>
     );
 }

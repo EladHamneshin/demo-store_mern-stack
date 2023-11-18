@@ -1,5 +1,6 @@
-import  { Dispatch, SetStateAction, useState } from 'react';
-import { Button, Typography,  CardContent, Paper, Grid, } from '@mui/material';
+import { Button, Typography, CardContent, Paper, Grid, Box } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Dispatch, SetStateAction, useState } from 'react';
 import cartsAPI from '../api/cartsAPI';
 import Product from '../types/Product';
 import { useAuth } from '../hooks/useAuth';
@@ -10,11 +11,12 @@ type Props = {
     product: Product;
     quantity: number;
     removeFromCart: (productId: string) => Promise<void>;
-    totalAmount: number
-    setTotalAmount: Dispatch<SetStateAction<number>>
+    totalAmount: number;
+    setTotalAmount: Dispatch<SetStateAction<number>>;
+    updateCartItemQuantity: (productId: string, newQuantity: number) => void; // Add prop for updating quantity
 };
 
-const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setTotalAmount}: Props) => {
+const ProductCartCard = ({ product, quantity, removeFromCart, totalAmount, setTotalAmount, updateCartItemQuantity }: Props) => {
     const [cartQuantity, setCartQuantity] = useState<number>(quantity);
     const { userInfo } = useAuth();
 
@@ -27,7 +29,9 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
                     cartLocalStorageUtils.incQuantityOfProduct(productId);
                 }
                 setCartQuantity(cartQuantity + 1);
-                setTotalAmount(totalAmount + product.price)
+                setTotalAmount(totalAmount + product.price);
+
+                updateCartItemQuantity(productId, cartQuantity + 1);
             } catch (error) {
                 console.error('Error increasing quantity:', error);
             }
@@ -46,6 +50,8 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
                 }
                 setCartQuantity(cartQuantity - 1);
                 setTotalAmount(totalAmount - product.price);
+
+                updateCartItemQuantity(productId, cartQuantity - 1);
             } catch (error) {
                 console.error('Error decreasing quantity:', error);
             }
@@ -59,19 +65,25 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
     };
 
     return (
-        <>
-        <Paper style={{ boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)', margin: 'auto', marginBottom: '16px', width: '50%', boxSizing: 'border-box' }}>
-            <Grid container spacing={3} alignItems="center" justifyContent="center">
-                <Grid item xs={6} justifyContent="center" alignItems="center">
-                    <img src={product.imageUrl} alt={product.name} height={200} />
+        <Paper style={{ margin: '16px', padding: '16px', boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)' }}>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={4}>
+                    <img src={product.imageUrl} alt={product.name} style={{ height: '100' }} />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={8}>
                     <CardContent>
-                        <Typography variant="h3">{product?.name}</Typography>
-                        <Typography variant="body1">{product?.category}</Typography>
-                        <Typography variant="body1">${product?.price}</Typography>
+                        <Typography variant="h3" style={{ fontSize: '1.5rem' }}>
+                            {product?.name}
+                        </Typography>
+                        <Typography variant="body1">
+                            <Box display="flex" alignItems="center">
+                                <Typography variant="body1" fontWeight="bold">
+                                    price for one:
+                                </Typography>
+                                <Typography variant="body1">${product?.price}</Typography>
+                            </Box>
+                        </Typography>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-
                             <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
                                 -
                             </Button>
@@ -81,15 +93,14 @@ const ProductCartCard = ({ product, quantity, removeFromCart , totalAmount, setT
                             </Button>
                         </div>
                     </CardContent>
-                    <div style={{ display: 'flex', margin: '5px', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
                         <Button variant="outlined" onClick={() => deleteFromCart(product._id)}>
-                            Delete from Cart
+                            <DeleteForeverIcon />
                         </Button>
                     </div>
                 </Grid>
             </Grid>
         </Paper>
-        </>
     );
 };
 
