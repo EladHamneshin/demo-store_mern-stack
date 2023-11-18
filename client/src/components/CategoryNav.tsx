@@ -29,7 +29,7 @@ export default function CategoryNav() {
       position: 'sticky',
       flexWrap: 'wrap',
       top: 0,
-      zIndex: 1,
+      zIndex: 100,
       backgroundColor: theme.palette.mode === 'dark' ? '#333' : theme.palette.background.default,
     }}>
       {categories.map((category) => (
