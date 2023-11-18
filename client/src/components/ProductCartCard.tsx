@@ -1,4 +1,4 @@
-import { Button, Typography, CardContent, Paper, Grid, Box } from '@mui/material';
+import { Typography, CardContent, Box, IconButton, Card } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import cartsAPI from '../api/cartsAPI';
@@ -66,42 +66,33 @@ const ProductCartCard = ({ product, quantity, removeFromCart, totalAmount, setTo
     };
 
     return (
-        <Paper style={{ margin: '16px', padding: '16px', boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)' }}>
-            <Grid container spacing={2} alignItems="center">
-                <Grid item xs={4}>
-                    <img src={product.imageUrl} alt={product.name} style={{ height: '100' }} />
-                </Grid>
-                <Grid item xs={8}>
-                    <CardContent>
-                        <Typography variant="h3" style={{ fontSize: '1.5rem' }}>
-                            {product?.name}
-                        </Typography>
-                        <Typography variant="body1">
-                            <Box display="flex" alignItems="center">
-                                <Typography variant="body1" fontWeight="bold">
-                                    price for one:
-                                </Typography>
-                                <Typography variant="body1">${product?.price}</Typography>
-                            </Box>
-                        </Typography>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-                            <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
-                                -
-                            </Button>
-                            <Typography variant="body1">{cartQuantity}</Typography>
-                            <Button variant="outlined" onClick={() => increaseQuantity(product._id)}>
-                                +
-                            </Button>
-                        </div>
-                    </CardContent>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
-                        <Button variant="outlined" onClick={() => deleteFromCart(product._id)}>
-                            <DeleteForeverIcon />
-                        </Button>
-                    </div>
-                </Grid>
-            </Grid>
-        </Paper>
+        <Card sx={{margin:2, padding:1}}>
+        <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+          <Box>
+            <img src={product.imageUrl} alt={product.name} style={{ width: '100px' }} />
+          </Box>
+  
+          <Box flexGrow={1}>
+            <CardContent>
+              <Typography variant="h5">{product.name}</Typography>
+              <Typography variant="body1">{product.description}</Typography>
+              <Typography variant="body2">{`Price: ${product.price}`}</Typography>
+            </CardContent>
+          </Box>
+  
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+            <IconButton onClick={() => increaseQuantity(product._id)}>+</IconButton>
+            <Typography variant="body1">{cartQuantity}</Typography>
+            <IconButton onClick={() => decreaseQuantity(product._id)}>-</IconButton>
+          </Box>
+  
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+            <IconButton onClick={() => deleteFromCart(product._id)}>
+              <DeleteForeverIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      </Card>
     );
 };
 

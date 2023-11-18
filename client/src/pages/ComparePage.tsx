@@ -8,18 +8,20 @@ import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 import { toastError, toastSuccess } from '../utils/toastUtils';
 import { UserContext } from '../UserContext';
+
 const ComparePage = () => {
     const { pid1, pid2 } = useParams();
     const [products, setProducts] = useState<Product[] | null>(null);
     const context = useContext(UserContext)!;
-    const { userInfo} = context
+    const { userInfo, setProductsInCart} = context
     const handleAddClick = async (product: Product) => {
         if (product.quantity < 1) {
             toastError('No items in stock');
         };
         if (userInfo) {
             try {
-                await cartsAPI.addToCart(product._id, '1');
+                const cart = await cartsAPI.addToCart(product._id, '1');
+                setProductsInCart(cart.items.length);
                 toastSuccess('Added to cart!');
             } catch (error) {
                 console.error('Failed to fetch', error);
@@ -28,6 +30,7 @@ const ComparePage = () => {
         } else {
             const productToAdd: CartItem = { product_id: product, quantity: 1 };
             cartLocalStorageUtils.addToCart(productToAdd);
+            setProductsInCart(cartLocalStorageUtils.getCart().length);
             toastSuccess('Added to cart!');
         };
     };

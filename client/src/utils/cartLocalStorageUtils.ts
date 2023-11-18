@@ -19,6 +19,7 @@ const addToCart = (cartItem: CartItem) => {
     const cart = getCart();
     const existingItemIndex = cart.findIndex(item => item.product_id._id === cartItem.product_id._id);
 
+    //TODO
     if (existingItemIndex !== -1) {
         cart[existingItemIndex].quantity++;
     } else {

@@ -2,8 +2,17 @@ import { useState, useEffect } from 'react';
 import productsAPI from '../api/productsAPI';
 import Product from '../types/Product';
 import ProductCard from './ProductCard';
-import { Typography } from '@mui/material';
-import ProductCardsContainer from './ProductCardsContainer';
+import { Grid, Paper, Typography, styled } from '@mui/material';
+
+const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    textAlign: 'center',
+    margin: 5,
+    color: theme.palette.text.secondary,
+    maxHeight: 400,
+  }));
+  
+
 
 function Top5ProductsPage() {
     const [top5Products, setTop5Products] = useState<Product[]>([]);
@@ -23,17 +32,21 @@ function Top5ProductsPage() {
 
     return (
         <>
-            <Typography display={'flex'} justifyContent={'center'} variant="h4">Top 5 Products</Typography>
+        <Typography marginTop={5} display={'flex'} justifyContent={'center'} variant="h4">Top 5 Products</Typography>
        
-        <ProductCardsContainer
-          
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+
         >
           {top5Products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+            <Grid item xs key={product._id}>
+              <Item><ProductCard key={product._id} product={product} /></Item>
+            </Grid>
           ))}
-        </ProductCardsContainer>
-      
- 
+        </Grid>
         </>
 
     );

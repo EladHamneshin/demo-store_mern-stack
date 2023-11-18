@@ -7,13 +7,12 @@ import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 import { toastError, toastSuccess } from '../utils/toastUtils';
 import { UserContext } from '../UserContext';
-import { toast } from 'react-toastify';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
     const context = useContext(UserContext)!;
-    const { userInfo} = context
+    const { userInfo, setProductsInCart} = context
     const [totalAmount, setTotalAmount] = useState<number>(0);
 
     useEffect(() => {
@@ -53,18 +52,20 @@ const CartPage = () => {
     const removeFromCart = async (productId: string) => {
         try {
             if (userInfo) {
-                const updateCart = await cartsAPI.deleteProductFromCart(productId);
-                const newCart = await cartsAPI.getCart()
+                await cartsAPI.deleteProductFromCart(productId);
+                const newCart = await cartsAPI.getCart();                
+                setProductsInCart(newCart.items.length);
                 setCartItems(newCart.items);
             } else {
-                const updateCart = cartLocalStorageUtils.removeFromCart(productId);
+                cartLocalStorageUtils.removeFromCart(productId);
                 const newCart = cartLocalStorageUtils.getCart();
+                setProductsInCart(newCart.length);
                 setCartItems(newCart);
             }
-            toast.success('Product removed from cart');
+            toastSuccess('Product removed from cart');
         } catch (error) {
             console.error('Error removing from cart:', error);
-            toast.error('Error removing product from cart');
+            toastError('Error removing product from cart');
         }
     };
 
@@ -73,10 +74,12 @@ const CartPage = () => {
             console.log('Product purchased!');
             alert(`Total Amount: ${totalAmount.toFixed(3)}`);
             const newCart = await cartsAPI.deleteCart();
+            setProductsInCart(newCart.items.length);
             setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
             setCartItems([])
+            setProductsInCart(0);
             alert(`Total Amount: $ ${totalAmount.toFixed(3)}`);
 
         };
@@ -110,12 +113,9 @@ const CartPage = () => {
     return (
         <Grid container spacing={3} style={{ display: 'flex', alignItems: 'center' }}>
     <Grid item xs={8}>
-        <Typography variant="h2" component="h2">
-            Cart Page
-        </Typography>
-        {cartItems.map((item, index) => (
+        {cartItems.map((item) => (
             <ProductCartCard
-                key={'ProductCartCard-' + index}
+                key={'ProductCartCard-' + item.product_id._id}
                 product={item.product_id}
                 quantity={item.quantity}
                 removeFromCart={removeFromCart}
@@ -131,8 +131,8 @@ const CartPage = () => {
                 <ListItem>
                     <ListItemText primary={`Number of Items: ${cartItems.length}`} />
                 </ListItem>
-                {cartItems.map((item, index) => (
-                    <ListItem key={`ListItem-${index}`}>
+                {cartItems.map((item) => (
+                    <ListItem key={`ListItem-${item.product_id._id}`}>
                         <ListItemText
                             primary={item.product_id.name}
                             secondary={`Quantity: ${item.quantity} | Total Price: $${(item.quantity * item.product_id.price).toFixed(3)}`}

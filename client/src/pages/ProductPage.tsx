@@ -19,7 +19,7 @@ const ProductPage = () => {
     const [product, setProduct] = useState<null | Product>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const context = useContext(UserContext)!;
-    const { userInfo} = context
+    const { userInfo, setProductsInCart} = context
     const { pid } = useParams();
 
     //handle get product by id from server
@@ -52,9 +52,10 @@ const ProductPage = () => {
         };
         if (userInfo) {
             try {
-                await cartsAPI.addToCart(product!._id, quantity.toString());
+                const cart = await cartsAPI.addToCart(product!._id, quantity.toString());
                 toastSuccess('Added to cart!');
                 setQuantity(1);
+                setProductsInCart(cart.items.length);
             } catch (error) {
                 console.error('failed to add to cart');
                 toastError('Failed to add');
@@ -62,6 +63,7 @@ const ProductPage = () => {
         } else {
             const itemForCart: CartItem = { product_id: product!, quantity: quantity };
             localstorage.addToCart(itemForCart);
+            setProductsInCart(localstorage.getCart().length);
             toastSuccess('Added to cart!');
             setQuantity(1);
         };

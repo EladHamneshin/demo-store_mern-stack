@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   DarkMode,
   LightMode,
@@ -27,6 +27,8 @@ import Logout from '@mui/icons-material/Logout';
 import ROUTES from '../routes/routesModel.ts';
 import { UserContext } from '../UserContext.tsx';
 import { toastError, toastSuccess } from '../utils/toastUtils.ts';
+import cartsAPI from '../api/cartsAPI.ts';
+import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils.ts';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -43,7 +45,7 @@ const AppBar = () => {
   );
   const navigate = useNavigate();
   const context = useContext(UserContext)!;
-  const { userInfo, logout, mode,  changeMode } = context
+  const { userInfo, logout, mode,  changeMode, productsInCart, setProductsInCart } = context
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -71,6 +73,28 @@ const AppBar = () => {
     navigate(ROUTES.CART);
   };
 
+  useEffect(() => {
+    const updateQuantity = async () => {
+      try {
+        if (userInfo) {
+          const cartData = await cartsAPI.getCart();
+          setProductsInCart(cartData.items.length);
+        } else {
+          const localCart = cartLocalStorageUtils.getCart();
+
+          if (localCart) {
+            setProductsInCart(localCart.length);
+          } else {
+            setProductsInCart(0);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }
+    updateQuantity();
+  }, [userInfo]);  
+
   return (
     <MUIAppBar position="static">
       <Toolbar sx={{ display:'flex', justifyContent:"space-between" }}>
@@ -85,7 +109,7 @@ const AppBar = () => {
           {mode === 'dark' ? <LightMode /> :  <DarkMode />}
         </IconButton>
         <IconButton color="inherit" onClick={handleCart} sx={{marginRight:1.5}}>
-          <StyledBadge badgeContent={0} color="warning">
+          <StyledBadge badgeContent={productsInCart} color="warning">
             <ShoppingCartIcon />
           </StyledBadge>
         </IconButton>
