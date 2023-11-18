@@ -1,184 +1,115 @@
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  OutlinedInput,
+  MenuItem,
+  Chip,
+  SelectChangeEvent,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import Product from '../types/Product';
-import { useParams } from 'react-router-dom';
-import {
-  Bag,
-  Book,
-  Computer,
-  Guitar,
-  Phone,
-  Ring,
-  Watch,
-} from '../types/CategoryTags';
-import {
-  bagTags,
-  bookTags,
-  computerTags,
-  guitarTags,
-  phoneTags,
-  ringTags,
-  watchTags,
-} from '../utils/categoryTags';
-let tagType: unknown;
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 type Props = {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
+
+type Tags = { [key: string]: string[] };
+
 const Filter = (props: Props) => {
   const { products, setProducts } = props;
-  const [brand, setBrand] = useState<PhoneBrand[]>([]);
-  const [material, setMaterial] = useState<PhoneMaterial[]>([]);
-  const [color, setColor] = useState<PhoneColor[]>([]);
-  const [price, setPrice] = useState<number[]>([0, 10000000]);
-  let pTags;
-  let PhoneKeys: string[] = [];
-  const { cname } = useParams();
-  switch (cname) {
-    case 'Phone':
-      tagType as Phone;
-      pTags = phoneTags;
-      tagType = PhoneKeys;
-      break;
-    case 'Computer':
-      tagType as Computer;
-      pTags = computerTags;
-      break;
-    case 'Ring':
-      tagType as Ring;
-      pTags = ringTags;
-      break;
-    case 'Book':
-      tagType as Book;
-      pTags = bookTags;
-      break;
-    case 'Bag':
-      tagType as Bag;
-      pTags = bagTags;
-      break;
-    case 'Watch':
-      tagType as Watch;
-      pTags = watchTags;
-      break;
-    case 'Guitar':
-      tagType as Guitar;
-      pTags = guitarTags;
-  }
-  const handleBrand = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setBrand([...brand, e.target.value as PhoneBrand]);
-    } else {
-      setBrand(brand.filter((b) => b !== e.target.value));
-    }
+  const tags = Object.keys(products[0].tags);
+
+  const [filters, setFilters] = useState<Tags>(() =>
+    tags.reduce((acc, tag) => {
+      acc[tag] = [];
+      return acc;
+    }, {} as Tags)
+  );
+
+  const tagsValues: Tags = {};
+  tags.forEach((tag) => {
+    tagsValues[tag] = [...new Set(products.map((p) => p.tags[tag]))];
+  });
+
+  const handleFilterChange = (
+    tag: keyof Tags,
+    event: SelectChangeEvent<(typeof filters)[keyof Tags]>
+  ) => {
+    const {
+      target: { value },
+    } = event;
+    setFilters((prevFilters) => ({ ...prevFilters, [tag]: [...value] }));
   };
-  const handleMaterial = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setMaterial([...material, e.target.value as PhoneMaterial]);
-    } else {
-      setMaterial(material.filter((m) => m !== e.target.value));
-    }
-  };
-  const handleColor = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setColor([...color, e.target.value as PhoneColor]);
-    } else {
-      setColor(color.filter((c) => c !== e.target.value));
-    }
-  };
-  const handlePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrice([Number(e.target.min), Number(e.target.max)]);
-  };
+
   useEffect(() => {
-    const newProducts = products.filter(
-      (p) =>
-        brand.length === 0 ||
-        brand.some((b) => p.tags.brand === (b as PhoneBrand))
-    );
-    setProducts(newProducts);
-  }, [brand]);
-  useEffect(() => {
-    const newProducts = products.filter(
-      (p) =>
-        material.length === 0 || material.some((m) => p.tags.material === m)
-    );
-    setProducts(newProducts);
-  }, [material]);
-  useEffect(() => {
-    const newProducts = products.filter(
-      (p) =>
-        color.length === 0 ||
-        color.some((c) => p.tags.color === (c as PhoneColor))
-    );
-    setProducts(newProducts);
-  }, [color]);
-  useEffect(() => {
-    const newProducts = products.filter(
-      (p) =>
-        price[0] === 0 ||
-        price[1] === 10000000 ||
-        (p.price >= price[0] && p.price <= price[1])
-    );
-    setProducts(newProducts);
-  }, [price]);
+    const filterProducts = () => {
+      const newProducts = products.filter((p) => {
+        for (const tag of tags) {
+          const isChecked = filters[tag].every((filter) => {
+            return p.tags[tag] === filter;
+          });
+          if (!(filters[tag].length === 0 || isChecked)) return false;
+        }
+        return true;
+      });
+      setProducts(newProducts);
+    };
+    filterProducts();
+  }, [filters]);
+
   return (
-    <>
-      <div className="filter">
-        <div className="filter__title">Brand</div>
-        {pTags.brand.map((b) => (
-          <label key={b}>
-            <input
-              type="checkbox"
-              value={b}
-              onChange={handleBrand}
-              checked={brand.includes(b as PhoneBrand)}
-            />
-            {b}
-          </label>
-        ))}
-      </div>
-      <div className="filter">
-        <div className="filter__title">Material</div>
-        {pTags.material.map((m) => (
-          <label key={m}>
-            <input
-              type="checkbox"
-              value={m}
-              onChange={handleMaterial}
-              checked={material.includes(m as PhoneMaterial)}
-            />
-            {m}
-          </label>
-        ))}
-      </div>
-      <div className="filter">
-        <div className="filter__title">Color</div>
-        {pTags?.color.map((c) => (
-          <label key={c}>
-            <input
-              type="checkbox"
-              value={c}
-              onChange={handleColor}
-              checked={color.includes(c as PhoneColor)}
-            />
-            {c}
-          </label>
-        ))}
-      </div>
-      <div className="filter">
-        <div className="filter__title">Price</div>
-        <input
-          type="range"
-          min="0"
-          max="10000000"
-          step="100000"
-          onChange={handlePrice}
-        />
-        <div className="filter__price">
-          <span>{price[0]}</span>
-          <span>{price[1]}</span>
-        </div>
-      </div>
-    </>
+    <Box>
+      {tags.map((tag) => (
+        <FormControl key={tag} sx={{ m: 1, width: 300 }}>
+          <InputLabel id={`search-by-${tag}`}>{`Search by ${tag}`}</InputLabel>
+          <Select
+            labelId={`search-by-${tag}`}
+            id={`${tag}-search`}
+            multiple
+            value={filters[tag]}
+            onChange={(event) => handleFilterChange(tag, event)}
+            input={
+              <OutlinedInput id={`select-multiple-chip-${tag}`} label="Chip" />
+            }
+            renderValue={(selected) => (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+            {tagsValues[tag].map((tagValue) => (
+              <MenuItem
+                key={tagValue}
+                value={tagValue}
+                style={{
+                  fontWeight: 500,
+                }}
+              >
+                {tagValue}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ))}
+    </Box>
   );
 };
+
 export default Filter;
