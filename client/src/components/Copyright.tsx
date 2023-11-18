@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 
 function Copyright(props: any) {
     return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>        
+      <Typography variant="body2" color="text.primary" align="center" marginBottom={4} {...props}>        
       {'Copyright © '}
         <Link color="inherit" href="/">
           Reuven Team Inc

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Typography, Button, IconButton, Box, Paper } from "@mui/material";
+import { Grid, Typography, Button, IconButton, Box, Paper, CircularProgress } from "@mui/material";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
 import { useNavigate, useParams } from "react-router-dom";
@@ -10,71 +10,74 @@ import { useAuth } from "../hooks/useAuth.ts";
 import cartsAPI from "../api/cartsAPI.ts";
 import * as localstorage from "../utils/cartLocalStorageUtils.ts";
 import CartItem from "../types/CartItem.ts";
-import { toast } from 'react-toastify';
+import { toastError, toastSuccess } from "../utils/toastUtils.ts";
 
 
 
 const ProductPage = () => {
-  const navigate = useNavigate();
-  const [product, setProduct] = useState<null | Product>(null);
-  const [quantity, setQuantity] = useState<number>(1);
-  const { userInfo } = useAuth();
-  const { pid } = useParams();
+    const navigate = useNavigate();
+    const [product, setProduct] = useState<null | Product>(null);
+    const [quantity, setQuantity] = useState<number>(1);
+    const { userInfo } = useAuth();
+    const { pid } = useParams();
 
-  //handle get product by id from server
-  const getProduct = async (pid: string) => {
-    try {
-      const product = await productsAPI.getProduct(pid!);
-      setProduct(product);
-    } catch (error) {
-      console.error('Failed to fetch');
+    //handle get product by id from server
+    const getProduct = async (pid: string) => {
+        try {
+            const product = await productsAPI.getProduct(pid!);
+            setProduct(product);
+        } catch (error) {
+            console.error('Failed to fetch');
+        };
     };
-  };
 
-  //get the product after the page is rendered
-  useEffect(() => {
-    getProduct(pid!);
-  }, []);
+    //get the product after the page is rendered
+    useEffect(() => {
+        getProduct(pid!);
+    }, []);
 
-  //handle decrease quantity by clicking on the minus button (when quantity shouldnt be lower then 1)
-  const decrementQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(prevQty => prevQty - 1);
+    //handle decrease quantity by clicking on the minus button (when quantity shouldnt be lower then 1)
+    const decrementQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(prevQty => prevQty - 1);
+        };
     };
-  };
 
-  //handle add to cart. (if user logged in, products is being added to db at the server, else its stored in localstorage)
-  const handleAddToCart = async () => {
-    if (quantity > product!.quantity) {
-      toast.error(`Only ${product!.quantity} in stock`);
-      return;
+    //handle add to cart. (if user logged in, products is being added to db at the server, else its stored in localstorage)
+    const handleAddToCart = async () => {
+        if (quantity > product!.quantity) {
+            toastError(`Only ${product!.quantity} in stock`);
+            return;
+        };
+        if (userInfo) {
+            try {
+                await cartsAPI.addToCart(product!._id, quantity.toString());
+                toastSuccess('Added to cart!');
+                setQuantity(1);
+            } catch (error) {
+                console.error('failed to add to cart');
+                toastError('Failed to add');
+            };
+        } else {
+            const itemForCart: CartItem = { product_id: product!, quantity: quantity };
+            localstorage.addToCart(itemForCart);
+            toastSuccess('Added to cart!');
+            setQuantity(1);
+        };
     };
-    if (userInfo) {
-      try {
-        await cartsAPI.addToCart(product!._id, quantity.toString());
-        toast.success('Added to cart!');
-        setQuantity(1);
-      } catch (error) {
-        console.error('failed to add to cart');
-        toast.error('Failed to add');
-      };
-    } else {
-      const itemForCart: CartItem = { product_id: product!, quantity: quantity };
-      localstorage.addToCart(itemForCart);
-      toast.success('Added to cart!');
-      setQuantity(1);
+
+    //Navigate the user to choose another product to compare them
+    const handleCompareProducts = () => {
+        navigate(`/category/${product!.category}`, { state: product });
     };
-  };
 
-  //Navigate the user to choose another product to compare them
-  const handleCompareProducts = () => {
-    navigate(`/category/${product!.category}`, { state: product });
-  };
+    //If the the product isn't loaded yet, show "Loading product..."
+    if (!product) {
+        return <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress />
+        </Box>;
+    }
 
-  //If the the product isn't loaded yet, show "Loading product..."
-  if (!product) {
-    return <div>Loading product...</div>
-  };
 
   //When the product is loaded then show the component
   return (

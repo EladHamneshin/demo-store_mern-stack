@@ -19,12 +19,13 @@ export default function CategoryCard({ category }: props) {
       } catch (err) {
         console.error((err as Error).message);
       }
+    console.log(category);
     
   };
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardActionArea onClick={handleClick}>
-        <CardMedia component="img" height="140" image="" alt="" />
+        <CardMedia component="img" height="140" image={category.imageUrl} alt="" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {category.name}

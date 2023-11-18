@@ -1,5 +1,4 @@
-import { Card } from '@mui/material';
-import Link from '@mui/material/Link';
+import { Paper, Typography, Link, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import categoriesAPI from '../api/categoriesAPI';
 import Category from '../types/Category';
@@ -13,6 +12,7 @@ const handleClick = async (category: Category) => {
 };
 
 export default function CategoryNav() {
+  const theme = useTheme();
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -23,27 +23,36 @@ export default function CategoryNav() {
   }, []);
 
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        typography: 'body1',
-        '& > :not(style) ~ :not(style)': {
-          ml: 2,
-        },
-      }}
-    >
+    <Paper elevation={2} sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      position: 'sticky',
+      flexWrap: 'wrap',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: theme.palette.mode === 'dark' ? '#333' : theme.palette.background.default,
+    }}>
       {categories.map((category) => (
         <Link
           href={`/category/${category.name}`}
           underline="none"
           key={category._id}
           onClick={() => handleClick(category)}
+          sx={{
+            margin: 0.5,
+            padding: 1,
+            borderRadius: theme.shape.borderRadius,
+            //backgroundColor: theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper,
+            color: theme.palette.getContrastText(theme.palette.mode === 'dark' ? '#444' : theme.palette.background.paper),
+            '&:hover': {
+              transform: 'scale(1.08)',
+              fontWeight: 'bold',
+            },
+          }}
         >
-          {category.name}
+          <Typography variant="body1">{category.name}</Typography>
         </Link>
       ))}
-    </Card>
+    </Paper>
   );
 }

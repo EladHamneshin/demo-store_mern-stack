@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import {
+  DarkMode,
+  LightMode,
+} from "@mui/icons-material";
 import {
   AppBar as MUIAppBar,
   Toolbar,
@@ -23,7 +27,8 @@ import Logout from '@mui/icons-material/Logout';
 import { useAuth } from '../hooks/useAuth';
 import usersAPI from '../api/usersAPI.ts';
 import ROUTES from '../routes/routesModel.ts';
-import { toast } from 'react-toastify';
+import { UserContext } from '../UserContext.tsx';
+import { toastError, toastSuccess } from '../utils/toastUtils.ts';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -35,13 +40,13 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 }));
 
 const AppBar = () => {
-  const logoPath =
-    'https://i.pinimg.com/originals/c1/92/9d/c1929d3492c2f64ab65b43808c072043.jpg';
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
   const { userInfo, logout } = useAuth();  
   const navigate = useNavigate();
+  const context = useContext(UserContext)!;
+  const { mode,  changeMode } = context
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -60,9 +65,9 @@ const AppBar = () => {
     try {
       await usersAPI.logoutUser();
       logout();
-      toast.success('User logged out successfully');
+      toastSuccess('User logged out successfully');
     } catch (err) {
-      toast.error((err as Error).message);
+      toastError((err as Error).message);
     }
   };
 
@@ -72,12 +77,18 @@ const AppBar = () => {
 
   return (
     <MUIAppBar position="static">
-      <Toolbar>
-        <StorefrontIcon/>
-        <Typography variant="h6" onClick={() => navigate('/')}component="div" sx={{ flexGrow: 1, cursor: 'pointer'}}>
-          Demo store
-        </Typography>
-        <IconButton color="inherit" onClick={handleCart}>
+      <Toolbar sx={{ display:'flex', justifyContent:"space-between" }}>
+        <Box  onClick={() => navigate('/')}   sx={{display:'flex', justifyContent:"space-between", alignItems:"center", cursor:"pointer" }}>
+          <StorefrontIcon  sx={{ marginRight: 2 }} />
+          <Typography  variant="h6" component="div" sx={{marginRight: 2}}>
+            Demo Store
+          </Typography>
+        </Box>
+        <Box sx={{ display:'flex', justifyContent:"space-between" }}>
+        <IconButton color="inherit" onClick={changeMode} sx={{marginRight:0.2}}>
+          {mode === 'dark' ? <LightMode /> :  <DarkMode />}
+        </IconButton>
+        <IconButton color="inherit" onClick={handleCart} sx={{marginRight:1.5}}>
           <StyledBadge badgeContent={0} color="warning">
             <ShoppingCartIcon />
           </StyledBadge>
@@ -127,6 +138,7 @@ const AppBar = () => {
             </Menu>
           </Box>
         )}
+        </Box>
       </Toolbar>
     </MUIAppBar>
   );

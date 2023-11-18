@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Stack, Typography, Button } from '@mui/material';
+import { Typography, Button, Box, Grid, Paper, List, ListItem, ListItemText } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
-import { toast } from 'react-toastify';
 import { useAuth } from '../hooks/useAuth';
+import CircularProgress from '@mui/material/CircularProgress';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
+import { toastError, toastSuccess } from '../utils/toastUtils';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
     const { userInfo } = useAuth();
     const [totalAmount, setTotalAmount] = useState<number>(0);
-
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -52,58 +52,106 @@ const CartPage = () => {
         try {
             if (userInfo) {
                 const updateCart = await cartsAPI.deleteProductFromCart(productId);
-                
                 setCartItems(updateCart.items);
             } else {
                 const updateCart = cartLocalStorageUtils.removeFromCart(productId);
                 const newCart = cartLocalStorageUtils.getCart();
-
-                setCartItems(newCart)
+                setCartItems(newCart);
             }
-            toast.success('Product removed from cart');
+            toastSuccess('Product removed from cart');
         } catch (error) {
             console.error('Error removing from cart:', error);
-            toast.error('Error removing product from cart');
+            toastError('Error removing product from cart');
         }
     };
 
     const buyNow = async () => {
         if (userInfo) {
             console.log('Product purchased!');
-            alert(`Total Amount: ${totalAmount}`);
-            const newCart = await cartsAPI.deleteCart()
-            setCartItems(newCart.items)
+            alert(`Total Amount: ${totalAmount.toFixed(3)}`);
+            const newCart = await cartsAPI.deleteCart();
+            setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
-            setCartItems([])
-        };
-    }
-        if (loading) {
-            return <div>Loading...</div>;
+            setCartItems([]);
+            alert(`Total Amount: $ ${totalAmount.toFixed(3)}`);
         }
-
-        if (cartItems.length === 0) {
-            return <Typography variant="h2">No items in the cart</Typography>;
-        }
-
-        return (
-            <Stack spacing={0} height={100}>
-                <Typography variant="h2" component="h2">
-                    Cart Page
-                </Typography>
-                {cartItems.map((item, index) => (
-                    <ProductCartCard
-                        key={'ProductCartCard-' + index}
-                        product={item.product_id}
-                        quantity={item.quantity}
-                        removeFromCart={removeFromCart}
-                    />
-                ))}
-                <Button variant="contained" onClick={buyNow}>
-                    Buy Now {totalAmount}
-                </Button>
-            </Stack>
-        );
     };
 
-    export default CartPage;
+    const updateCartItemQuantity = (productId: string, newQuantity: number) => {
+        setCartItems((prevCartItems) =>
+            prevCartItems.map((item) =>
+                item.product_id._id === productId ? { ...item, quantity: newQuantity } : item
+            )
+        );
+
+        const total = cartItems.reduce((sum, item) => {
+            return sum + item.quantity * item.product_id.price;
+        }, 0);
+        setTotalAmount(total);
+    };
+
+    if (loading) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    if (cartItems.length === 0) {
+        return <Typography variant="h2">No items in the cart</Typography>;
+    }
+
+    return (
+        <Grid container spacing={3} style={{ display: 'flex', alignItems: 'center' }}>
+    <Grid item xs={8}>
+        <Typography variant="h2" component="h2">
+            Cart Page
+        </Typography>
+        {cartItems.map((item, index) => (
+            <ProductCartCard
+                key={'ProductCartCard-' + index}
+                product={item.product_id}
+                quantity={item.quantity}
+                removeFromCart={removeFromCart}
+                totalAmount={totalAmount}
+                setTotalAmount={setTotalAmount}
+                updateCartItemQuantity={updateCartItemQuantity}
+            />
+        ))}
+    </Grid>
+    <Grid item xs={4}>
+        <Paper sx={{ padding: '16px', overflow: 'auto', maxHeight: '70vh', minHeight: '70vh', position: 'fixed', top: '65%', right: '0', transform: 'translateY(-50%)' }}>
+            <List>
+                <ListItem>
+                    <ListItemText primary={`Number of Items: ${cartItems.length}`} />
+                </ListItem>
+                {cartItems.map((item, index) => (
+                    <ListItem key={`ListItem-${index}`}>
+                        <ListItemText
+                            primary={item.product_id.name}
+                            secondary={`Quantity: ${item.quantity} | Total Price: $${(item.quantity * item.product_id.price).toFixed(3)}`}
+                        />
+                        <img src={item.product_id.imageUrl} alt={item.product_id.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '1rem' }} />
+                    </ListItem>
+                ))}
+                <ListItem>
+                    <ListItemText primary="Total Amount" />
+                    <Typography variant="h5" sx={{ marginLeft: '1rem' }}>
+                        ${totalAmount.toFixed(3)}
+                    </Typography>
+                </ListItem>
+                <ListItem>
+                    <Button variant="contained" onClick={buyNow}>
+                        Buy Now
+                    </Button>
+                </ListItem>
+            </List>
+        </Paper>
+    </Grid>
+</Grid>
+    );
+};
+
+export default CartPage;

@@ -1,85 +1,107 @@
-import { useState } from 'react';
-import { Button, Typography, CardContent } from '@mui/material';
+import { Button, Typography, CardContent, Paper, Grid, Box } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Dispatch, SetStateAction, useState } from 'react';
 import cartsAPI from '../api/cartsAPI';
-import { toast } from 'react-toastify';
 import Product from '../types/Product';
 import { useAuth } from '../hooks/useAuth';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
+import { toastError } from '../utils/toastUtils';
 
 type Props = {
     product: Product;
     quantity: number;
     removeFromCart: (productId: string) => Promise<void>;
+    totalAmount: number;
+    setTotalAmount: Dispatch<SetStateAction<number>>;
+    updateCartItemQuantity: (productId: string, newQuantity: number) => void; // Add prop for updating quantity
 };
 
-const ProductCartCard = ({ product, quantity, removeFromCart }: Props) => {
+const ProductCartCard = ({ product, quantity, removeFromCart, totalAmount, setTotalAmount, updateCartItemQuantity }: Props) => {
     const [cartQuantity, setCartQuantity] = useState<number>(quantity);
     const { userInfo } = useAuth();
 
     const increaseQuantity = async (productId: string) => {
         if (cartQuantity < product.quantity) {
-            if (userInfo) {
-                try {
+            try {
+                if (userInfo) {
                     await cartsAPI.updateQuantity(productId, 'inc');
-                    setCartQuantity(cartQuantity + 1);
-                } catch (error) {
-                    console.error('Error increasing quantity:', error);
+                } else {
+                    cartLocalStorageUtils.incQuantityOfProduct(productId);
                 }
-            } else {
-                cartLocalStorageUtils.incQuantityOfProduct(productId);
-                setCartQuantity(cartQuantity + 1)
+                setCartQuantity(cartQuantity + 1);
+                setTotalAmount(totalAmount + product.price);
+
+                updateCartItemQuantity(productId, cartQuantity + 1);
+            } catch (error) {
+                console.error('Error increasing quantity:', error);
             }
         } else {
-            toast.error(`There are only ${product.quantity} items available for purchase`);
-        };
-    }
+            toastError(`There are only ${product.quantity} items available for purchase`);
+        }
+    };
+
     const decreaseQuantity = async (productId: string) => {
         if (cartQuantity > 1) {
-            if (userInfo) {
-                try {
-                    setCartQuantity(cartQuantity - 1);
+            try {
+                if (userInfo) {
                     await cartsAPI.updateQuantity(productId, 'dec');
-                } catch (error) {
-                    console.error('Error decreasing quantity:', error);
-                }
-            } else {
-                if (cartQuantity > 1) {
+                } else {
                     cartLocalStorageUtils.decQuantityOfProduct(productId);
-                    setCartQuantity(cartQuantity - 1);
                 }
+                setCartQuantity(cartQuantity - 1);
+                setTotalAmount(totalAmount - product.price);
+
+                updateCartItemQuantity(productId, cartQuantity - 1);
+            } catch (error) {
+                console.error('Error decreasing quantity:', error);
             }
         } else {
-            toast.error('Quantity cannot be less than 1');
+            toastError('Quantity cannot be less than 1');
         }
     };
-    
 
-        const deleteFromCart = async (productId: string) => {
-
-            await removeFromCart(productId);
-
-        }
-        return (<>
-            <CardContent >
-                <div>
-
-                    <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
-                        -
-                    </Button>
-                    <Typography variant="body1">{cartQuantity}</Typography>
-                    <Button variant="outlined" onClick={() => increaseQuantity(product._id)}>
-                        +
-                    </Button>
-                    <Button variant="outlined" onClick={() => deleteFromCart(product._id)}>
-                        Delete from Cart
-                    </Button>
-                </div>
-                <Typography variant="body1">{product.category}</Typography>
-                <Typography variant="body1">{product.price}</Typography>
-                <Typography variant="body1">{product.name}</Typography>
-                <img src={product.imageUrl} alt="" />
-            </CardContent>
-        </>);
+    const deleteFromCart = async (productId: string) => {
+        await removeFromCart(productId);
     };
 
-    export default ProductCartCard;
+    return (
+        <Paper style={{ margin: '16px', padding: '16px', boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)' }}>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={4}>
+                    <img src={product.imageUrl} alt={product.name} style={{ height: '100' }} />
+                </Grid>
+                <Grid item xs={8}>
+                    <CardContent>
+                        <Typography variant="h3" style={{ fontSize: '1.5rem' }}>
+                            {product?.name}
+                        </Typography>
+                        <Typography variant="body1">
+                            <Box display="flex" alignItems="center">
+                                <Typography variant="body1" fontWeight="bold">
+                                    price for one:
+                                </Typography>
+                                <Typography variant="body1">${product?.price}</Typography>
+                            </Box>
+                        </Typography>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+                            <Button variant="outlined" onClick={() => decreaseQuantity(product._id)}>
+                                -
+                            </Button>
+                            <Typography variant="body1">{cartQuantity}</Typography>
+                            <Button variant="outlined" onClick={() => increaseQuantity(product._id)}>
+                                +
+                            </Button>
+                        </div>
+                    </CardContent>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+                        <Button variant="outlined" onClick={() => deleteFromCart(product._id)}>
+                            <DeleteForeverIcon />
+                        </Button>
+                    </div>
+                </Grid>
+            </Grid>
+        </Paper>
+    );
+};
+
+export default ProductCartCard;
