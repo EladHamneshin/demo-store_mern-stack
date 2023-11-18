@@ -1,11 +1,11 @@
 import { Button, Typography, CardContent, Paper, Grid, Box } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import cartsAPI from '../api/cartsAPI';
 import Product from '../types/Product';
-import { useAuth } from '../hooks/useAuth';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import { toastError } from '../utils/toastUtils';
+import { UserContext } from '../UserContext';
 
 type Props = {
     product: Product;
@@ -18,7 +18,8 @@ type Props = {
 
 const ProductCartCard = ({ product, quantity, removeFromCart, totalAmount, setTotalAmount, updateCartItemQuantity }: Props) => {
     const [cartQuantity, setCartQuantity] = useState<number>(quantity);
-    const { userInfo } = useAuth();
+    const context = useContext(UserContext)!;
+    const { userInfo} = context
 
     const increaseQuantity = async (productId: string) => {
         if (cartQuantity < product.quantity) {
