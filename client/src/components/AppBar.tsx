@@ -24,8 +24,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useNavigate } from 'react-router-dom';
 import Logout from '@mui/icons-material/Logout';
-import { useAuth } from '../hooks/useAuth';
-import usersAPI from '../api/usersAPI.ts';
 import ROUTES from '../routes/routesModel.ts';
 import { UserContext } from '../UserContext.tsx';
 import { toastError, toastSuccess } from '../utils/toastUtils.ts';
@@ -43,10 +41,9 @@ const AppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const { userInfo, logout } = useAuth();  
   const navigate = useNavigate();
   const context = useContext(UserContext)!;
-  const { mode,  changeMode } = context
+  const { userInfo, logout, mode,  changeMode } = context
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -63,8 +60,7 @@ const AppBar = () => {
   const handleLogout = async () => {
     handleCloseUserMenu();
     try {
-      await usersAPI.logoutUser();
-      logout();
+      await logout();
       toastSuccess('User logged out successfully');
     } catch (err) {
       toastError((err as Error).message);

@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
 import cartsAPI from '../api/cartsAPI'
 import ROUTES from '../routes/routesModel'
-import UserInfo from '../types/UserInfo'
 import { Link, Container, CssBaseline, Box, Avatar, Typography, TextField, Button, Grid } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import * as localStorage from '../utils/cartLocalStorageUtils'
-import usersAPI from '../api/usersAPI'
 import { toastError, toastSuccess } from '../utils/toastUtils'
+import { UserContext } from '../UserContext'
 
 const sendCartToServer = () => {
     if (localStorage.isCartEmpty()) return;
@@ -23,8 +21,9 @@ const sendCartToServer = () => {
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const { userInfo, login } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
+    const context = useContext(UserContext)!;
+    const { userInfo, login} = context
 
     React.useEffect(() => {
         if (userInfo) {
@@ -40,9 +39,8 @@ const LoginPage = () => {
 
         try {
             setIsLoading(true);
-            const loggedUser: UserInfo = await usersAPI.loginUser(email.toString(), password.toString());
+            await login(email.toString(), password.toString());
             setIsLoading(false);
-            login(loggedUser);
             sendCartToServer();
             toastSuccess('Login successful');
             navigate(ROUTES.HOME);
