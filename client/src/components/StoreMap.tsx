@@ -104,6 +104,17 @@ const StoreMap = () => {
                 popupRef!.current!.hidden = true;
             }
         });
+        
+        map.on('pointermove', function (e) {
+            if (e.dragging) return;
+            
+            const pixel = map.getEventPixel(e.originalEvent);
+            const hit = map.forEachFeatureAtPixel(pixel, function (_feature, _layer) {
+              return true;
+            });
+          
+            map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+          });
     }, []);
 
     return (
