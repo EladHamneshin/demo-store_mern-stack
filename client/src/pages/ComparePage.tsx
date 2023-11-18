@@ -1,17 +1,18 @@
-import  { useEffect, useState } from 'react';
+import  { useContext, useEffect, useState } from 'react';
 import productsAPI from '../api/productsAPI';
 import { Box, Button, CircularProgress, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import Product from '../types/Product';
-import { useAuth } from '../hooks/useAuth';
 import cartsAPI from '../api/cartsAPI';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 import { toastError, toastSuccess } from '../utils/toastUtils';
+import { UserContext } from '../UserContext';
 const ComparePage = () => {
     const { pid1, pid2 } = useParams();
     const [products, setProducts] = useState<Product[] | null>(null);
-    const { userInfo } = useAuth();
+    const context = useContext(UserContext)!;
+    const { userInfo} = context
     const handleAddClick = async (product: Product) => {
         if (product.quantity < 1) {
             toastError('No items in stock');

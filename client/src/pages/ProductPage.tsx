@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Grid, Typography, Button, IconButton, Box, Paper, CircularProgress } from "@mui/material";
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import RemoveCircleRoundedIcon from '@mui/icons-material/RemoveCircleRounded';
@@ -6,11 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import productsAPI from "../api/productsAPI";
 import Product from "../types/Product.ts";
 import StoreMap from "../components/StoreMap.tsx";
-import { useAuth } from "../hooks/useAuth.ts";
 import cartsAPI from "../api/cartsAPI.ts";
 import * as localstorage from "../utils/cartLocalStorageUtils.ts";
 import CartItem from "../types/CartItem.ts";
 import { toastError, toastSuccess } from "../utils/toastUtils.ts";
+import { UserContext } from "../UserContext.tsx";
 
 
 
@@ -18,7 +18,8 @@ const ProductPage = () => {
     const navigate = useNavigate();
     const [product, setProduct] = useState<null | Product>(null);
     const [quantity, setQuantity] = useState<number>(1);
-    const { userInfo } = useAuth();
+    const context = useContext(UserContext)!;
+    const { userInfo} = context
     const { pid } = useParams();
 
     //handle get product by id from server

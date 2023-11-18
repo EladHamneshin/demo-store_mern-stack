@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Typography, Button, Box, Grid, Paper, List, ListItem, ListItemText } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
-import { useAuth } from '../hooks/useAuth';
 import CircularProgress from '@mui/material/CircularProgress';
 import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 import { toastError, toastSuccess } from '../utils/toastUtils';
+import { UserContext } from '../UserContext';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const { userInfo } = useAuth();
+    const context = useContext(UserContext)!;
+    const { userInfo} = context
     const [totalAmount, setTotalAmount] = useState<number>(0);
 
     useEffect(() => {
