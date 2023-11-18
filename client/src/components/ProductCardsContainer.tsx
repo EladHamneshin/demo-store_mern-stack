@@ -5,7 +5,7 @@ const ProductCardsContainer = styled(Box)({
   display: "flex",
   flexWrap: "wrap",
   gap: '3px',
-
+  justifyContent: "center",
 });
 
 export default ProductCardsContainer;
