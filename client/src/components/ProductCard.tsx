@@ -23,8 +23,19 @@ export default function ProductCard({ product, navigateToOnClick }: props) {
     }
   };
   return (
-    <Card sx={{ maxWidth: 345, margin: '5px' , boxSizing:'border-box',boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)',marginBlock:'10px'}}>
-      <CardActionArea onClick={handleCLick} >
+    <Card onClick={handleCLick} sx={{ 
+      maxWidth: 200, // adjust this value to change the size of the card
+      margin: '5px', 
+      boxSizing:'border-box',
+      boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)',
+      marginBlock:'10px',
+      transition: 'transform 0.3s', // animate the transform property
+      '&:hover': {
+        transform: 'scale(1.03)', // scale the card up by 105% when hovered over
+        
+      },
+    }}>
+      <CardActionArea >
         <CardMedia
           component="img"
           image={product.imageUrl}
