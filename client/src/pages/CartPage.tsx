@@ -7,6 +7,7 @@ import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 import { toastError, toastSuccess } from '../utils/toastUtils';
 import { UserContext } from '../UserContext';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -53,16 +54,17 @@ const CartPage = () => {
         try {
             if (userInfo) {
                 const updateCart = await cartsAPI.deleteProductFromCart(productId);
-                setCartItems(updateCart.items);
+                const newCart = await cartsAPI.getCart()
+                setCartItems(newCart.items);
             } else {
                 const updateCart = cartLocalStorageUtils.removeFromCart(productId);
                 const newCart = cartLocalStorageUtils.getCart();
                 setCartItems(newCart);
             }
-            toastSuccess('Product removed from cart');
+            toast.success('Product removed from cart');
         } catch (error) {
             console.error('Error removing from cart:', error);
-            toastError('Error removing product from cart');
+            toast.error('Error removing product from cart');
         }
     };
 
@@ -74,10 +76,11 @@ const CartPage = () => {
             setCartItems(newCart.items);
         } else {
             cartLocalStorageUtils.clearCart();
-            setCartItems([]);
+            setCartItems([])
             alert(`Total Amount: $ ${totalAmount.toFixed(3)}`);
-        }
-    };
+
+        };
+    }
 
     const updateCartItemQuantity = (productId: string, newQuantity: number) => {
         setCartItems((prevCartItems) =>
