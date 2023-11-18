@@ -78,38 +78,39 @@ const ProductPage = () => {
         </Box>;
     }
 
-    //When the product is loaded then show the component
-    return (
-        <>
-            <Paper style={{ margin: 50, boxShadow: '0 4px 8px rgba(0, 0, 0.9, 0.8)' }}>
-                <Grid container spacing={3} alignItems='center' justifyContent='center'>
-                    <Grid item xs={6} justifyContent='center' alignItems='center'>
-                        <img src={product.imageUrl} alt={product.name} height={200} />
-                    </Grid>
-                    <Grid item xs={6} >
-                        <Typography variant="h3">{product.name}</Typography>
-                        <Typography variant="body1">{product.description}</Typography>
-                        <Typography variant="h6">${product.price}</Typography>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <IconButton onClick={decrementQuantity}><RemoveCircleRoundedIcon ></RemoveCircleRoundedIcon></IconButton>
-                            <Box>{quantity}</Box>
-                            <IconButton onClick={() => setQuantity(quantity + 1)}><AddCircleRoundedIcon ></AddCircleRoundedIcon></IconButton>
-                        </div>
-                        <div style={{ margin: "5px", alignItems: 'space-around' }}>
-                            <Button style={{ margin: 5 }} variant="contained" color="primary" onClick={handleAddToCart}>
-                                Add to Cart
-                            </Button>
-                            <Button style={{ margin: 5 }} variant="contained" color="primary" onClick={handleCompareProducts}>
-                                Compare similar products
-                            </Button>
-                        </div>
-                    </Grid>
-                </Grid>
-            </Paper>
-            <Paper style={{ margin: '10px 50px' }}>
-                <StoreMap />
-            </Paper>
-        </>
-    );
+
+  //When the product is loaded then show the component
+  return (
+    <>
+      <Paper style={{ margin: 50 }}>
+        <Grid container spacing={3} alignItems='center' justifyContent='center'>
+          <Grid item xs={6} justifyContent='center' alignItems='center'>
+            <img src={product?.imageUrl} alt={product?.name} height={200} />
+          </Grid>
+          <Grid item xs={6} >
+            <Typography variant="h3">{product?.name}</Typography>
+            <Typography variant="body1">{product?.description}</Typography>
+            <Typography variant="h6">${product?.price}</Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IconButton onClick={decrementQuantity}><RemoveCircleRoundedIcon ></RemoveCircleRoundedIcon></IconButton>
+              <Box>{quantity}</Box>
+              <IconButton onClick={() => setQuantity(quantity + 1)}><AddCircleRoundedIcon ></AddCircleRoundedIcon></IconButton>
+            </div>
+            <div style={{ margin: "5px", alignItems: 'space-around' }}>
+              <Button style={{ margin: 5 }} variant="contained" color="primary" onClick={handleAddToCart}>
+                Add to Cart
+              </Button>
+              <Button style={{ margin: 5 }} variant="contained" color="primary" onClick={handleCompareProducts}>
+                Compare similar products
+              </Button>
+            </div>
+          </Grid>
+        </Grid>
+      </Paper>
+      <Paper style={{margin: '10px 50px',height:500}}>
+        <StoreMap />
+      </Paper>
+    </>
+  );
 };
 export default ProductPage;
