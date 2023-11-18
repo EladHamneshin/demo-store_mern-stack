@@ -28,6 +28,7 @@ export default function CategoryNav() {
       justifyContent: 'center',
       position: 'sticky',
       flexWrap: 'wrap',
+      marginBottom: 2,
       top: 0,
       zIndex: 1,
       backgroundColor: theme.palette.mode === 'dark' ? '#333' : theme.palette.background.default,
