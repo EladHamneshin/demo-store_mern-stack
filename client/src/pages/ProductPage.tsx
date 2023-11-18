@@ -104,7 +104,7 @@ const ProductPage = () => {
           </Grid>
         </Grid>
       </Paper>
-      <Paper style={{margin: '10px 50px'}}>
+      <Paper style={{margin: '10px 50px',height:500}}>
         <StoreMap />
       </Paper>
     </>
