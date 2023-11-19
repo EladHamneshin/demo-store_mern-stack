@@ -148,10 +148,12 @@ const CartPage = () => {
                     </Typography>
                 </ListItem>
                 <ListItem>
-                    <Container><Paypal/>
-                    {/* <Button variant="contained" onClick={buyNow}>
+                    <Container>
+                    <Button sx={{width:"100%", marginBottom:1}} variant="contained" onClick={buyNow}>
                         Buy Now
-                    </Button> */}
+                    </Button>
+                        <Paypal/>
+                    
                     </Container>
                 </ListItem>
             </List>
