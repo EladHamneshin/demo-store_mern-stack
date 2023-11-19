@@ -32,6 +32,7 @@ type Tags = { [key: string]: string[] };
 const Filter = (props: Props) => {
   const { products, setProducts } = props;
   const tags = Object.keys(products[0].tags);
+  const tagsValues: Tags = {};
 
   const [filters, setFilters] = useState<Tags>(() =>
     tags.reduce((acc, tag) => {
@@ -40,7 +41,6 @@ const Filter = (props: Props) => {
     }, {} as Tags)
   );
 
-  const tagsValues: Tags = {};
   tags.forEach((tag) => {
     tagsValues[tag] = [...new Set(products.map((p) => p.tags[tag]))];
   });
