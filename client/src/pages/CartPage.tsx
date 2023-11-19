@@ -126,7 +126,7 @@ const CartPage = () => {
         ))}
     </Grid>
     <Grid item xs={4}>
-        <Paper sx={{ padding: '16px', overflow: 'auto', maxHeight: '70vh', minHeight: '70vh', position: 'fixed', top: '65%', right: '0', transform: 'translateY(-50%)' }}>
+        <Paper sx={{ padding: '16px', minHeight: '70vh', position: 'sticky', right: '0', transform: 'translateY(20px)', }}>
             <List>
                 <ListItem>
                     <ListItemText primary={`Number of Items: ${cartItems.length}`} />
