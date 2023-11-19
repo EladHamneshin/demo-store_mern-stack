@@ -68,7 +68,7 @@ const RegisterPage = () => {
       await userAPI.register(email.toString(), password.toString() );
       setIsLoading(false);
       toastSuccess("Register success");
-      navigate(ROUTES.HOME);
+      navigate(ROUTES.LOGIN);
     } catch (err) {
       setIsLoading(false);
       toastError((err as Error).message);
