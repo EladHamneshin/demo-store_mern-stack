@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Typography, Button, Box, Grid, Paper, List, ListItem, ListItemText } from '@mui/material';
+import { Typography, Button, Box, Grid, Paper, List, ListItem, ListItemText, Container } from '@mui/material';
 import ProductCartCard from '../components/ProductCartCard';
 import cartsAPI from '../api/cartsAPI';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -7,6 +7,7 @@ import * as cartLocalStorageUtils from '../utils/cartLocalStorageUtils';
 import CartItem from '../types/CartItem';
 import { toastError, toastSuccess } from '../utils/toastUtils';
 import { UserContext } from '../UserContext';
+import Paypal from '../components/Paypal';
 
 const CartPage = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -147,9 +148,11 @@ const CartPage = () => {
                     </Typography>
                 </ListItem>
                 <ListItem>
-                    <Button variant="contained" onClick={buyNow}>
+                    <Container><Paypal/>
+                    {/* <Button variant="contained" onClick={buyNow}>
                         Buy Now
-                    </Button>
+                    </Button> */}
+                    </Container>
                 </ListItem>
             </List>
         </Paper>
