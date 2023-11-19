@@ -111,7 +111,7 @@ const CartPage = () => {
     }
 
     return (
-        <Grid container spacing={3} style={{ display: 'flex', alignItems: 'center' }}>
+        <Grid container spacing={3} style={{ display: 'flex', alignItems: 'start' }}>
     <Grid item xs={8}>
         {cartItems.map((item) => (
             <ProductCartCard
@@ -126,7 +126,7 @@ const CartPage = () => {
         ))}
     </Grid>
     <Grid item xs={4}>
-        <Paper sx={{ padding: '16px', minHeight: '70vh', position: 'sticky', right: '0', transform: 'translateY(20px)', }}>
+        <Paper sx={{ padding: '16px', position: 'sticky', right: '0', transform: 'translateY(20px)', }}>
             <List>
                 <ListItem>
                     <ListItemText primary={`Number of Items: ${cartItems.length}`} />
