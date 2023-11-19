@@ -43,7 +43,7 @@ const LoginPage = () => {
             setIsLoading(false);
             sendCartToServer();
             toastSuccess('Login successful');
-            navigate(ROUTES.HOME);
+            navigate(-1);
         } catch (err) {
             setIsLoading(false);
             toastError((err as Error).message);
