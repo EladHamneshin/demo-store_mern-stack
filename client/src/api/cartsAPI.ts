@@ -1,15 +1,16 @@
 import Cart from "../types/Cart";
 import handleApiRes from "./apiResHandler";
 
+const apiUri = import.meta.env.VITE_API_URI;
 
 async function getCart(): Promise<Cart> {
-    const response = await fetch('/api/users/cart');
+    const response = await fetch(`${apiUri}/api/users/cart`);
     return await handleApiRes(response);
 }
 
 async function addToCart(pid: string, quantity: string): Promise<Cart> {
 
-    const response = await fetch(`/api/users/cart`, {
+    const response = await fetch(`${apiUri}/api/users/cart`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -24,7 +25,7 @@ async function addToCart(pid: string, quantity: string): Promise<Cart> {
 
 async function updateQuantity(pid: string, action : "inc" | "dec"):Promise<Cart> {
     
-    const response = await fetch(`/api/users/cart`, {
+    const response = await fetch(`${apiUri}/api/users/cart`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -39,14 +40,14 @@ async function updateQuantity(pid: string, action : "inc" | "dec"):Promise<Cart>
 }
 
 async function deleteProductFromCart(pid: string):Promise<Cart> {
-    const response = await fetch(`/api/users/cart/${pid}`, {method: "DELETE"});
+    const response = await fetch(`${apiUri}/api/users/cart/${pid}`, {method: "DELETE"});
     const data = await handleApiRes(response);
     return data
 }
 
 
 async function deleteCart():Promise<Cart> {
-    const response = await fetch(`/api/users/cart`, {method: "DELETE"});
+    const response = await fetch(`${apiUri}/api/users/cart`, {method: "DELETE"});
     return await handleApiRes(response);
 }
 
