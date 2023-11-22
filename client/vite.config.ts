@@ -6,8 +6,8 @@ export default defineConfig({
     plugins: [react()],
     server: {
       port: 5173,
-      strictPort: true,
-      host: true,
+      // strictPort: true,
+      // host: true,
       // proxy: {
       //   '/api': {
       //     target: 'http://demo-store:5000',
